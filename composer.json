@@ -1,0 +1,15 @@
+{
+    "name": "arknet/linereracer",
+    "description": "Draughts gaming engine.",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Arknet\\LineReracer\\": "src/"
+        }
+    },
+    "minimum-stability": "stable",
+    "require": {
+        "symfony/dependency-injection": "^7.1"
+    }
+}
