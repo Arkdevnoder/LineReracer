@@ -2,14 +2,31 @@
 
 namespace Arknet\LineReracer\Definition;
 
+use Arknet\LineReracer\Trait\Service\Catalog;
+use Arknet\LineReracer\Registrator\Container\Merger;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class Game
+class Game implements Merger
 {
-	private function $containter;
+	use Catalog;
 
-	public function __constuctor()
+	private ContainerBuilder $containter;
+
+	public function __construct()
 	{
 		$this->container = new ContainerBuilder();
+	}
+
+	public function defineServiceContainer(): void
+	{
+		foreach($this->getServices() as $key => $service)
+		{
+			$this->getContainer()->register($key, $service);
+		}
+	}
+
+	private function getContainer(): array
+	{
+		return $this->container;
 	}
 }
