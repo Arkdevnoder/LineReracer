@@ -5,8 +5,15 @@ namespace Arknet\LineReracer\Trait\Service;
 trait Catalog
 {
 	private array $services = [
-		"board" => \Arknet\LineReracer\Definition\Board::class,
-		"engine" => \Arknet\LineReracer\Definition\Engine::class
+		"board" => [
+			"name" => \Arknet\LineReracer\Definition\Board::class
+		],
+		"engine" => [
+			"name" => \Arknet\LineReracer\Definition\Engine::class
+		],
+		"displayer" => [
+			"name" => \Arknet\LineReracer\Definition\Displayer::class
+		]
 	];
 
 	public function getServices(): array

@@ -1,8 +1,8 @@
 <?php
 
-namespace Arknet\LineReracer\Registrator\Container;
+namespace Arknet\LineReracer\Contracts\Registrator\Container;
 
 interface Merger
 {
-	public function defineServiceConteiner(): void;
+	public function defineServiceContainer(): void;
 }

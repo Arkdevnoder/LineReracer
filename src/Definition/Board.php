@@ -3,18 +3,45 @@
 namespace Arknet\LineReracer\Definition;
 
 use Arknet\LineReracer\Board\Action;
-use Arknet\LineReracer\Entity\Movement;
-use Arknet\LineReracer\Entity\Collection;
 
 class Board
 {
-	public function getPossibleMoves(): Collection
+
+	private array $defaultPosition = [
+		"b", "b", "b", "b",
+		"b", "b", "b", "b",
+		"b", "b", "b", "b",
+		"", "", "", "",
+		"", "", "", "",
+		"w", "w", "w", "w",
+		"w", "w", "w", "w",
+		"w", "w", "w", "w"
+	];
+
+	private Collection $positionCollection;
+
+	public function getWhitePieceString(): string
 	{
-		
+		return self::WhitePiece;
 	}
 
-	public function getBestMove(): Movement
+	public function getWhiteQueenString(): string
 	{
-		
+		return self::WhiteQueen;
+	}
+
+	public function getBlackPieceString(): string
+	{
+		return self::BlackPiece;
+	}
+
+	public function getBlackQueenString(): string
+	{
+		return self::BlackQueen;
+	}
+
+	public function generateInitialPosition(): void
+	{
+
 	}
 }
