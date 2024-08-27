@@ -2,7 +2,7 @@
 
 namespace Arknet\LineReracer\Entity;
 
-class Collection
+class PositionCollection
 {
 	private array $vector;
 

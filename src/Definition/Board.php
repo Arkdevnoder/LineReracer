@@ -3,44 +3,23 @@
 namespace Arknet\LineReracer\Definition;
 
 use Arknet\LineReracer\Board\Action;
+use Arknet\LineReracer\Entity\PositionCollection;
 
 class Board
 {
-
-	private array $defaultPosition = [
-		"b", "b", "b", "b",
-		"b", "b", "b", "b",
-		"b", "b", "b", "b",
-		"", "", "", "",
-		"", "", "", "",
-		"w", "w", "w", "w",
-		"w", "w", "w", "w",
-		"w", "w", "w", "w"
-	];
-
 	private Collection $positionCollection;
 
-	public function getWhitePieceString(): string
+	public function __construct(\PositionCollection $positionCollection)
 	{
-		return self::WhitePiece;
+		$this->positionCollection = $positionCollection;
 	}
 
-	public function getWhiteQueenString(): string
+	public function getPossibleMoves(): PositionCollection
 	{
-		return self::WhiteQueen;
+		
 	}
 
-	public function getBlackPieceString(): string
-	{
-		return self::BlackPiece;
-	}
-
-	public function getBlackQueenString(): string
-	{
-		return self::BlackQueen;
-	}
-
-	public function generateInitialPosition(): void
+	private function generateInitialPosition(): void
 	{
 
 	}

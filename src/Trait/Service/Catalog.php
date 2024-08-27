@@ -13,7 +13,7 @@ trait Catalog
 		],
 		"displayer" => [
 			"name" => \Arknet\LineReracer\Definition\Displayer::class
-		]
+		],
 	];
 
 	public function getServices(): array
