@@ -4,5 +4,5 @@ namespace Arknet\LineReracer\Contracts\Registrator\Container;
 
 interface Merger
 {
-	public function defineServiceContainer(): void;
+	public function configureAutowire(): void;
 }

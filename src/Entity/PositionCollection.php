@@ -4,7 +4,26 @@ namespace Arknet\LineReracer\Entity;
 
 class PositionCollection
 {
-	private array $vector;
+	public const RowsLength = 8;
+	public const ColumnsLength = 8;
 
-	public function get():
+	private array $rows;
+
+	public function __construct()
+	{
+
+	}
+
+	public function getRows(): array
+	{
+		return $this->rows;
+	}
+
+	private function initializeRows(): array
+	{
+		for($i = 0; $i < static::RowsLength; $i++)
+		{
+			
+		}
+	}
 }

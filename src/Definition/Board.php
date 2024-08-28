@@ -7,9 +7,9 @@ use Arknet\LineReracer\Entity\PositionCollection;
 
 class Board
 {
-	private Collection $positionCollection;
+	private PositionCollection $positionCollection;
 
-	public function __construct(\PositionCollection $positionCollection)
+	public function __construct(PositionCollection $positionCollection)
 	{
 		$this->positionCollection = $positionCollection;
 	}
