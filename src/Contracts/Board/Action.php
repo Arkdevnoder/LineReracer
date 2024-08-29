@@ -1,6 +1,6 @@
 <?php
 
-namespace Arknet\LineReracer\Board;
+namespace Arknet\LineReracer\Contracts\Board;
 
 interface Action {
 	public function getPossibleMoves();

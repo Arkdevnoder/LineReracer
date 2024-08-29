@@ -2,7 +2,7 @@
 
 ini_set("display_errors", 0);
 
-require "../vendor/autoload.php";
+require __DIR__."/../vendor/autoload.php";
 
 use Arknet\LineReracer\Definition\Game;
 

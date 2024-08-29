@@ -8,9 +8,5 @@
             "Arknet\\LineReracer\\": "src/"
         }
     },
-    "minimum-stability": "stable",
-    "require": {
-        "symfony/dependency-injection": "^7.1",
-        "symfony/config": "^7.1"
-    }
+    "minimum-stability": "stable"
 }

@@ -3,62 +3,38 @@
 namespace Arknet\LineReracer\Definition;
 
 use Arknet\LineReracer\Definition\Board;
-use Symfony\Component\Config\FileLocator;
 use Arknet\LineReracer\Definition\Engine;
+use Arknet\LineReracer\Definition\Movement;
 use Arknet\LineReracer\Definition\Displayer;
-use Arknet\LineReracer\Trait\Registrator\Catalog;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Arknet\LineReracer\Entity\PositionCollection;
 use Arknet\LineReracer\Contracts\Registrator\Container\Merger;
-use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 
 class Game implements Merger
 {
-	use Catalog;
-
-	private ContainerBuilder $container;
-
-	public function __construct()
-	{
-		$this->initServiceContainer();
-	}
-
-	public function initServiceContainer(): void
-	{
-		$this->container = new ContainerBuilder();
-		$this->configureAutowire();
-	}
-
-	public function configureAutowire(): void
-	{
-		$this->getLoader()->load('Config/Autowire.php');
-		$this->getContainer()->compile();
-	}
 
 	public function getBoard(): Board
 	{
-		return $this->getContainer()->get("board");
+		return (new Board($this->getPositionCollection()));
 	}
 
 	public function getEngine(): Engine
 	{
-		return $this->getContainer()->get("engine");
+		return (new Engine);
 	}
 
 	public function getDisplayer(): Displayer
 	{
-		return $this->getContainer()->get("displayer");
+		return (new Displayer);
 	}
 
-	protected function getContainer(): ContainerBuilder
+	public function getMovement(): Movement
 	{
-		return $this->container;
+		return (new Movement);
 	}
 
-	private function getLoader(): PhpFileLoader
+	private function getPositionCollection(): PositionCollection
 	{
-		return new PhpFileLoader(
-			$this->getContainer(),
-			new FileLocator(__DIR__."/../")
-		);
+		return new PositionCollection(true);
 	}
+
 }

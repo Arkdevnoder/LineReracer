@@ -2,9 +2,10 @@
 
 namespace Arknet\LineReracer\Entity;
 
+use Arknet\LineReracer\Contracts\Entity\GameElement;
 use Arknet\LineReracer\Exception\PieceNotFoundException;
 
-class Piece
+class Piece implements GameElement
 {
 	private const WhitePiece = "w";
 	private const WhiteQueen = "W";
@@ -13,9 +14,27 @@ class Piece
 
 	private string $value;
 
-	public function set(string $piece): this
+	public function setWhitePiece(): Piece
 	{
-		$this->setValue($piece);
+		$this->value = static::WhitePiece;
+		return $this;
+	}
+
+	public function setBlackPiece(): Piece
+	{
+		$this->value = static::BlackPiece;
+		return $this;
+	}
+
+	public function setWhiteQueen(): Piece
+	{
+		$this->value = static::WhiteQueen;
+		return $this;
+	}
+
+	public function setBlackQueen(): Piece
+	{
+		$this->value = static::BlackQueen;
 		return $this;
 	}
 
@@ -29,9 +48,15 @@ class Piece
 		return in_array($piece, $this->getAllPieces());
 	}
 
-	public function toQueen(): this
+	public function toQueen(): Piece
 	{
 		$this->value = strtoupper($this->value);
+		return $this;
+	}
+
+	public function set(string $piece): Piece
+	{
+		$this->setValue($piece);
 		return $this;
 	}
 
