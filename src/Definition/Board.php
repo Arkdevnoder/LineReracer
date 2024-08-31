@@ -4,8 +4,9 @@ namespace Arknet\LineReracer\Definition;
 
 use Arknet\LineReracer\Board\Action;
 use Arknet\LineReracer\Entity\PositionCollection;
+use Arknet\LineReracer\Entity\MovementsCollection;
 
-class Board
+class Board implements Action
 {
 	private PositionCollection $positionCollection;
 
@@ -14,13 +15,19 @@ class Board
 		$this->positionCollection = $positionCollection;
 	}
 
-	public function getPossibleMoves(): PositionCollection
+	public function getPositionCollection(): PositionCollection
 	{
-		
+		return $this->positionCollection;
 	}
 
-	private function generateInitialPosition(): void
+	public function getPossibleMoves(): MovementsCollection
 	{
+		return $this->getTolerance()->getMovementsCollection();
+	}
 
+	private function getTolerance(): Tolerance
+	{
+		$positionCollection = $this->getPositionCollection();
+		new Tolerance($positionCollection, $positionCollection->getOccupiedIndexes());
 	}
 }

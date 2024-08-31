@@ -2,7 +2,7 @@
 
 namespace Arknet\LineReracer\Exception;
 
-class PieceNotFoundException extends \Exception
+class IndexNotFoundException extends \Exception
 {
 	//
 }

@@ -4,37 +4,44 @@ namespace Arknet\LineReracer\Definition;
 
 use Arknet\LineReracer\Definition\Board;
 use Arknet\LineReracer\Definition\Engine;
-use Arknet\LineReracer\Definition\Movement;
 use Arknet\LineReracer\Definition\Displayer;
 use Arknet\LineReracer\Entity\PositionCollection;
 use Arknet\LineReracer\Contracts\Registrator\Container\Merger;
 
 class Game implements Merger
 {
+	private ServiceContainer $serviceContainer;
+
+	public function __construct()
+	{
+		$this->serviceContainer = new ServiceContainer();
+		$this->serviceContainer->set("board", new Board($this->getPositionCollection()));
+		$this->serviceContainer->set("engine", new Engine());
+		$this->serviceContainer->set("displayer", new Displayer());
+	}
 
 	public function getBoard(): Board
 	{
-		return (new Board($this->getPositionCollection()));
+		return $this->getServiceContainer()->get("board");
 	}
 
 	public function getEngine(): Engine
 	{
-		return (new Engine);
+		return $this->getServiceContainer()->get("engine");
 	}
 
 	public function getDisplayer(): Displayer
 	{
-		return (new Displayer);
-	}
-
-	public function getMovement(): Movement
-	{
-		return (new Movement);
+		return $this->getServiceContainer()->get("displayer");
 	}
 
 	private function getPositionCollection(): PositionCollection
 	{
-		return new PositionCollection(true);
+		return new PositionCollection();
 	}
 
+	private function getServiceContainer(): ServiceContainer
+	{
+		return $this->serviceContainer;
+	}
 }

@@ -8,5 +8,8 @@
             "Arknet\\LineReracer\\": "src/"
         }
     },
-    "minimum-stability": "stable"
+    "minimum-stability": "stable",
+    "require": {
+        "psr/container": "^2.0"
+    }
 }
