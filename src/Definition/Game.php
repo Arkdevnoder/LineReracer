@@ -15,8 +15,9 @@ class Game implements Merger
 	public function __construct()
 	{
 		$this->serviceContainer = new ServiceContainer();
-		$this->serviceContainer->set("board", new Board($this->getPositionCollection()));
+		$this->setBoard();
 		$this->serviceContainer->set("engine", new Engine());
+		$this->serviceContainer->set("turn", new Turn());
 		$this->serviceContainer->set("displayer", new Displayer());
 	}
 
@@ -33,6 +34,17 @@ class Game implements Merger
 	public function getDisplayer(): Displayer
 	{
 		return $this->getServiceContainer()->get("displayer");
+	}
+
+	public function getTurn(): Turn
+	{
+		return $this->getServiceContainer()->get("turn");
+	}
+
+	private function setBoard(): Game
+	{
+		$this->serviceContainer->set("board", (new Board($this->getPositionCollection()))->setGame($this));
+		return $this;
 	}
 
 	private function getPositionCollection(): PositionCollection

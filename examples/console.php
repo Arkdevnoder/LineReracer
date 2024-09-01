@@ -8,4 +8,4 @@ use Arknet\LineReracer\Definition\Game;
 
 $game = (new Game);
 
-var_dump($game->getBoard()->getPositionCollection()->getOccupiedIndexes());
+var_dump($game->getBoard()->getPossibleMoves());

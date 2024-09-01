@@ -7,10 +7,10 @@ use Arknet\LineReracer\Exception\PieceNotFoundException;
 
 class Piece implements GameElement
 {
-	private const WhitePiece = "w";
-	private const WhiteQueen = "W";
-	private const BlackPiece = "b";
-	private const BlackQueen = "B";
+	public const WhitePiece = "w";
+	public const WhiteQueen = "W";
+	public const BlackPiece = "b";
+	public const BlackQueen = "B";
 
 	private string $value;
 
@@ -39,6 +39,11 @@ class Piece implements GameElement
 	}
 
 	public function get(): string
+	{
+		return $this->value;
+	}
+
+	public function getValue(): string
 	{
 		return $this->value;
 	}

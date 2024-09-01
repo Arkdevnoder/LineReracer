@@ -13,6 +13,11 @@ class Emptiness implements GameElement
 
     public function get(): string
     {
-        return static::DefaultValue;
+        return $this->defaultValue;
+    }
+
+    public function getValue(): string
+    {
+        return $this->defaultValue;
     }
 }
