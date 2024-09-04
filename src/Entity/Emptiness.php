@@ -20,4 +20,9 @@ class Emptiness implements GameElement
     {
         return $this->defaultValue;
     }
+
+    public function isEnemy(): bool
+    {
+        return true;
+    }
 }

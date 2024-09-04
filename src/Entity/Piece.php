@@ -14,6 +14,11 @@ class Piece implements GameElement
 
 	private string $value;
 
+	public function isEnemy(GameElement $gameElement): bool
+	{
+		return strtolower($gameElement->getValue()) !== strtolower($this->value);
+	}
+
 	public function setWhitePiece(): Piece
 	{
 		$this->value = static::WhitePiece;
@@ -36,6 +41,11 @@ class Piece implements GameElement
 	{
 		$this->value = static::BlackQueen;
 		return $this;
+	}
+
+	public function isQueen(): bool
+	{
+		return ($this->value == static::WhiteQueen) || ($this->value == static::BlackQueen);
 	}
 
 	public function get(): string

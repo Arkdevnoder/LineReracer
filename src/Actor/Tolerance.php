@@ -5,14 +5,17 @@ namespace Arknet\LineReracer\Actor;
 use Arknet\LineReracer\Entity\Piece;
 use Arknet\LineReracer\Definition\Game;
 use Arknet\LineReracer\Definition\Turn;
+use Arknet\LineReracer\Trait\Initor\Gameable;
 use Arknet\LineReracer\Entity\PositionCollection;
 use Arknet\LineReracer\Entity\MovementsCollection;
 
 class Tolerance
 {	
-	private Game $game;
+	use Gameable;
+
 	private array $occupiedIndexes;
 	private array $freeIndexes;
+	private array $jumpingIndexes;
 	private PositionCollection $positionCollection;
 	private MovementsCollection $movementsCollection;
 	private NeighborOccupiedChecker $neighborOccupiedChecker;
@@ -28,25 +31,30 @@ class Tolerance
 		->setPositionCollection($this->positionCollection);
 	}
 
-	private function getGame(): Game
-	{
-		return $this->game;
-	}
-
-	public function setGame(Game $game): Tolerance
-	{
-		$this->game = $game;
-		return $this;
-	}
-
 	public function getMovementsCollection(): MovementsCollection
+	{
+		$this->generateFreeIndexes();
+		$this->generateJumpingIndexes();
+		return $this->movementsCollection;
+	}
+
+	private function generateFreeIndexes(): void
 	{
 		foreach($this->occupiedIndexes as $index)
 		{
 			$this->fieldComputing($index);
 		}
-		var_dump($this->freeIndexes);
-		return $this->movementsCollection;
+	}
+
+	private function generateJumpingIndexes(): void
+	{
+		$this->jumpingIndexes = $this->getFreeToJumpingConvertor()->transform();
+	}
+
+	private function getFreeToJumpingConvertor(): FreeToJumpingConvertor
+	{
+		return (new FreeToJumpingConvertor())->setGame($this->getGame())
+		->setPositionCollection($this->positionCollection)->setFreeIndexes($this->freeIndexes);
 	}
 
 	private function fieldComputing(int $index): void

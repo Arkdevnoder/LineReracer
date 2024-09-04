@@ -3,5 +3,6 @@
 namespace Arknet\LineReracer\Contracts\Entity;
 
 interface GameElement {
-	public function get();
+	public function get(): string;
+	public function getValue(): string;
 }

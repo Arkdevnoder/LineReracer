@@ -7,6 +7,11 @@ trait VectorPropertiesElement
 	private int $iterator;
 	private array $vector;
 
+	public function getBetween(int $offset1, int $offset2): array
+	{
+		return array_slice($this->vector, $offset1, $offset2);
+	}
+
 	public function rewind(): void
 	{
 		$this->iterator = 0;

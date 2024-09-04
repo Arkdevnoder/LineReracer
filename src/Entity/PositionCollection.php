@@ -29,6 +29,11 @@ class PositionCollection implements \Iterator
 		$this->formMaps(static::ColumnsLength, static::RowsLength);
 	}
 
+	public function getMaxDiagonalDimension(): int
+	{
+		return static::RowsLength - 1;
+	}
+
 	public function swap(int $key1, int $key2): object
 	{
 		[$this->vector[$key1], $this->vector[$key2]] = [$this->vector[$key2], $this->vector[$key1]];
@@ -92,19 +97,19 @@ class PositionCollection implements \Iterator
 		return $result;
 	}
 
-	private function actionOfGettingOccupiedVector(array &$result): void
-	{
-		foreach($this->vector as $index => $element)
-		{
-			$this->getResultOccupiedVectorElement($result, $index);
-		}
-	}
-
 	public function getResultOccupiedVectorElement(array &$result, int $index): void
 	{
 		if(!($this->vector[$index] instanceof Emptiness))
 		{
 			$result[] = $index;
+		}
+	}
+
+	private function actionOfGettingOccupiedVector(array &$result): void
+	{
+		foreach($this->vector as $index => $element)
+		{
+			$this->getResultOccupiedVectorElement($result, $index);
 		}
 	}
 
