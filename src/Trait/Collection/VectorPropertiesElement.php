@@ -55,4 +55,9 @@ trait VectorPropertiesElement
 		$this->vector[] = $object;
 		return $this;
 	}
+
+	public function countVector(): int
+	{
+		return count($this->vector);
+	}
 }

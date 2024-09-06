@@ -19,6 +19,11 @@ class Piece implements GameElement
 		return strtolower($gameElement->getValue()) !== strtolower($this->value);
 	}
 
+	public function isAlly(GameElement $gameElement): bool
+	{
+		return strtolower($gameElement->getValue()) == strtolower($this->value);
+	}
+
 	public function setWhitePiece(): Piece
 	{
 		$this->value = static::WhitePiece;

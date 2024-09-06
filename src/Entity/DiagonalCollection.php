@@ -3,13 +3,33 @@
 namespace Arknet\LineReracer\Entity;
 
 use Arknet\LineReracer\Trait\Initor\Indexable;
+use Arknet\LineReracer\Trait\Initor\Directionable;
+use Arknet\LineReracer\Trait\Brancher\DirectionMap;
 use Arknet\LineReracer\Contracts\Entity\GameElement;
 use Arknet\LineReracer\Trait\Initor\PositionCollectionable;
+use Arknet\LineReracer\Trait\Brancher\PieceCollectionLogic;
+use Arknet\LineReracer\Trait\Brancher\QueenCollectionLogic;
 use Arknet\LineReracer\Trait\Collection\VectorPropertiesElement;
 
 class DiagonalCollection implements \Iterator
 {
-	use Indexable, PositionCollectionable, VectorPropertiesElement;
+	use Indexable;
+	use Directionable;
+	use PositionCollectionable;
+	use VectorPropertiesElement;
+
+	use DirectionMap;
+	use QueenCollectionLogic;
+	use PieceCollectionLogic;
+
+	public function convertIteratorsToIndexes(array $emptyIterators): array
+	{
+		foreach($emptyIterators as $iterator)
+		{
+			$result[] = $this->getIndexFromIterator($this->getIndexCoordinates(), $iterator);
+		}
+		return $result;
+	}
 
 	public function hasJump(): bool
 	{
@@ -20,42 +40,16 @@ class DiagonalCollection implements \Iterator
 		return $this->hasPieceJump();
 	}
 
-	public function hasPieceJump(): bool
+	private function getIndexFromIterator(array $coordinates, int $iterator): int
 	{
-		$element = $this->getPositionCollection()->get($this->getIndex());
-		$checkIsEnemy = isset($this->getVector()[0]) ? $this->getVector()[0]->isEnemy($element): false;
-		return ($this->getVector()[1] ?? [] instanceof Emptiness) && $checkIsEnemy;
-	}
-	
-	public function hasQueenJump(): bool
-	{
-		foreach($this->getVector() as $key => $gameElement)
-		{
-			$hasJump += (int) $this->isJumpableQueenKey($key);
-		}
-		return (($hasJump ?? 0) > 0);
+		$offset = $this->multiplyOffset($this->getOffset($this->getDirection()), $iterator+1);
+		return $this->getPositionCollection()->getIndexByCoordinates(
+			[$offset["x"]+$coordinates["x"], $offset["y"]+$coordinates["y"]]
+		);
 	}
 
-	private function isJumpableQueenKey(int $key): bool
+	private function getIndexCoordinates(): array
 	{
-		return ($key !== 0) &&
-		($this->getVector()[$key] instanceof Emptiness) &&
-		$this->hasOnlyOneEnemy($this->getBetween(0, $key));
+		return $this->getPositionCollection()->getCoordinatesByIndex($this->getIndex());
 	}
-
-	private function hasOnlyOneEnemy(array $elements): bool
-	{
-		$gameElement = $this->getPositionCollection()->get($this->getIndex());
-		return $this->countEnemies($elements, $element) === 1;
-	}
-
-	private function countEnemies(array $elements, GameElement $gameElement): int
-	{
-		foreach($elements as $element)
-		{
-			$result += (int) $element->isEnemy($gameElement);
-		}
-		return (int) ($result ?? 0);
-	}
-
 }

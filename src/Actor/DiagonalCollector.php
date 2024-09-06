@@ -4,6 +4,7 @@ namespace Arknet\LineReracer\Actor;
 
 use Arknet\LineReracer\Trait\Initor\Gameable;
 use Arknet\LineReracer\Entity\DiagonalCollection;
+use Arknet\LineReracer\Trait\Brancher\DirectionMap;
 use Arknet\LineReracer\Exception\IndexNotFoundException;
 use Arknet\LineReracer\Exception\ParamsNotSettedException;
 use Arknet\LineReracer\Trait\Initor\PositionCollectionable;
@@ -65,7 +66,7 @@ class DiagonalCollector
     {
         if(!isset($this->firstDiagonalCollection))
         {
-            $this->firstDiagonalCollection = $this->getNewDiagonalCollection();
+            $this->firstDiagonalCollection = $this->getNewDiagonalCollection(DirectionMap::DirectionNE);
         }
         return $this->firstDiagonalCollection;
     }
@@ -74,7 +75,7 @@ class DiagonalCollector
     {
         if(!isset($this->secondDiagonalCollection))
         {
-            $this->secondDiagonalCollection = $this->getNewDiagonalCollection();
+            $this->secondDiagonalCollection = $this->getNewDiagonalCollection(DirectionMap::DirectionSE);
         }
         return $this->secondDiagonalCollection;
     }
@@ -83,7 +84,7 @@ class DiagonalCollector
     {
         if(!isset($this->thirdDiagonalCollection))
         {
-            $this->thirdDiagonalCollection = $this->getNewDiagonalCollection();
+            $this->thirdDiagonalCollection = $this->getNewDiagonalCollection(DirectionMap::DirectionSW);
         }
         return $this->thirdDiagonalCollection;
     }
@@ -92,14 +93,15 @@ class DiagonalCollector
     {
         if(!isset($this->fourthDiagonalCollection))
         {
-            $this->fourthDiagonalCollection = $this->getNewDiagonalCollection();
+            $this->fourthDiagonalCollection = $this->getNewDiagonalCollection(DirectionMap::DirectionNW);
         }
         return $this->fourthDiagonalCollection;
     }
 
-    private function getNewDiagonalCollection(): DiagonalCollection
+    private function getNewDiagonalCollection(string $direction): DiagonalCollection
     {
-        return (new DiagonalCollection)->setPositionCollection($this->getPositionCollection())->setIndex($this->index);
+        return (new DiagonalCollection)->setPositionCollection($this->getPositionCollection())
+               ->setIndex($this->index)->setDirection($direction);
     }
 
     private function setCoordinatesByIndex(): void

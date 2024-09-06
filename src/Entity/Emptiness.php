@@ -23,6 +23,11 @@ class Emptiness implements GameElement
 
     public function isEnemy(): bool
     {
-        return true;
+        return false;
+    }
+
+    public function isAlly(): bool
+    {
+        return false;
     }
 }

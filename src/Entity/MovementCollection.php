@@ -6,5 +6,5 @@ use Arknet\LineReracer\Trait\Collection\VectorPropertiesElement;
 
 class MovementCollection implements \Iterator
 {
-	
+	use VectorPropertiesElement;
 }
