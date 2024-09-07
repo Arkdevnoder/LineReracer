@@ -8,9 +8,9 @@ trait Indexable
 {
     private int $index;
 
-    public function setIndex(int $int): object
+    public function setIndex(int $index): object
     {
-        $this->index = $int;
+        $this->index = $index;
         return $this;
     }
 

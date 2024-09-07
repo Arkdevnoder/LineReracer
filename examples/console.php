@@ -8,4 +8,9 @@ use Arknet\LineReracer\Definition\Game;
 
 $game = (new Game);
 
-var_dump($game->getBoard()->getPossibleMoves());
+while(true)
+{
+    $game->getBoard()->displayWithMoves();
+    $move = readline("Enter move: ");
+    $game->getBoard()->moveByIndex((int) $move);
+}

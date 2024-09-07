@@ -12,6 +12,15 @@ trait VectorPropertiesElement
 		return array_slice($this->vector, $offset1, $offset2);
 	}
 
+	public function mergeArray(array $array): void
+	{
+		if(!$this->hasVector())
+		{
+			$this->vector = [];
+		}
+		$this->vector = array_values(array_merge($this->vector, $array));
+	}
+
 	public function rewind(): void
 	{
 		$this->iterator = 0;
@@ -44,6 +53,11 @@ trait VectorPropertiesElement
 		return $this->vector;
 	}
 
+	public function hasVector(): bool
+	{
+		return isset($this->vector);
+	}
+
 	public function setVector(array $vector): object
 	{
 		$this->vector = $vector;
@@ -58,6 +72,11 @@ trait VectorPropertiesElement
 
 	public function countVector(): int
 	{
-		return count($this->vector);
+		return $this->hasVector() ? count($this->vector) : 0;
+	}
+
+	public function isEmpty(): bool
+	{
+		return $this->countVector() === 0;
 	}
 }

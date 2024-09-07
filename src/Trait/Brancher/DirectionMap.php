@@ -10,19 +10,19 @@ trait DirectionMap
     public const DirectionNW = "NW";
 
     public const Map = [
-        "NE" => [
+        "SE" => [
             "x" => 1,
             "y" => 1
         ],
-        "SE" => [
+        "NE" => [
             "x" => 1,
             "y" => -1
         ],
-        "SE" => [
+        "NW" => [
             "x" => -1,
             "y" => -1
         ],
-        "NW" => [
+        "SW" => [
             "x" => -1,
             "y" => 1
         ]

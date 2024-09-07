@@ -15,6 +15,7 @@ class Tolerance
 
 	private array $occupiedIndexes;
 	private array $freeIndexes;
+	private array $stepsIndexes;
 	private array $jumpingIndexes;
 	private PositionCollection $positionCollection;
 	private MovementsCollection $movementsCollection;
@@ -26,7 +27,6 @@ class Tolerance
 	) {
 		$this->occupiedIndexes = $occupiedIndexes;
 		$this->positionCollection = $positionCollection;
-		$this->movementsCollection = new MovementsCollection;
 		$this->neighborOccupiedChecker = (new NeighborOccupiedChecker)
 		->setPositionCollection($this->positionCollection);
 	}
@@ -35,7 +35,25 @@ class Tolerance
 	{
 		$this->generateFreeIndexes();
 		$this->generateJumpingIndexes();
-		return $this->movementsCollection;
+		$this->generateStepsIndexes();
+		return empty($this->jumpingIndexes) ? $this->getStepsMoves() : $this->getJumpsMoves();
+	}
+
+	private function getStepsMoves(): MovementsCollection
+	{
+		return (new StepsMoveCalculator)->setIndexes($this->stepsIndexes)
+		->setPositionCollection($this->positionCollection)->getMovementsCollection();
+	}
+
+	private function getJumpsMoves(): MovementsCollection
+	{
+		return (new JumpsMoveCalculator)->setIndexes($this->jumpingIndexes)
+		->setPositionCollection($this->positionCollection)->getMovementsCollection();
+	}
+
+	private function generateStepsIndexes(): void
+	{
+		$this->stepsIndexes = array_diff($this->freeIndexes, $this->jumpingIndexes);
 	}
 
 	private function generateFreeIndexes(): void

@@ -14,6 +14,16 @@ class Piece implements GameElement
 
 	private string $value;
 
+	public function isWhite(): bool
+	{
+		return strtolower($this->getValue()) == static::WhitePiece;
+	}
+
+	public function isBlack(): bool
+	{
+		return !$this->isWhite();
+	}
+
 	public function isEnemy(GameElement $gameElement): bool
 	{
 		return strtolower($gameElement->getValue()) !== strtolower($this->value);

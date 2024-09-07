@@ -26,6 +26,21 @@ class Turn
 		return $this;
 	}
 
+	public function isWhite(): bool
+	{
+		return $this->value == static::White;
+	}
+
+	public function isBlack(): bool
+	{
+		return $this->value == static::Black;
+	}
+
+	public function toggle(): void
+	{
+		$this->isWhite() ? $this->setBlack() : $this->setWhite();
+	}
+
 	public function getValue(): string
 	{
 		return $this->value;

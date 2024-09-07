@@ -14,12 +14,18 @@ trait QueenCollectionLogic
 
     private int $hitIterator = -1;
 
+    public function getQueenSteps(): MovementsCollection
+    {
+        $emptyIndexes = $this->convertIteratorsToIndexes($this->getEmptyIteratorsAfter(0));
+		return $this->getMovementsCollectionBasedOnIndexes(new MovementsCollection, $emptyIndexes);
+    }
+
     public function getQueenNearestJumps(): MovementsCollection
 	{
 		$this->hasQueenJump();
 		$emptyIterators = $this->getEmptyIteratorsAfter($this->hitIterator);
         $emptyIndexes = $this->convertIteratorsToIndexes($emptyIterators);
-		return $this->getMovementsCollectionBasedOnEmptyIndexes(new MovementsCollection, $emptyIndexes);
+		return $this->getMovementsCollectionBasedOnIndexes(new MovementsCollection, $emptyIndexes);
 	}
 	
 	public function hasQueenJump(): bool
@@ -31,7 +37,14 @@ trait QueenCollectionLogic
 		return (($hasJump ?? 0) > 0);
 	}
 
-	private function getMovementsCollectionBasedOnEmptyIndexes(
+    public function getEmptyIteratorsAfter(int $iterator): array
+	{
+		$result = [];
+		$this->getEmptyIteratorsAfterContinue($result, $iterator);
+		return $result;
+	}
+
+	public function getMovementsCollectionBasedOnIndexes(
 		MovementsCollection $movementsCollection,
 		array $emptyIndexes
 	): MovementsCollection {
@@ -51,13 +64,6 @@ trait QueenCollectionLogic
                 $this->convertIteratorsToIndexes([$this->hitIterator])[0]
             )->setToIndex($emptyIndex)
 		));
-	}
-
-	private function getEmptyIteratorsAfter(int $iterator): array
-	{
-		$result = [];
-		$this->getEmptyIteratorsAfterContinue($result, $iterator);
-		return $result;
 	}
 
 	private function getEmptyIteratorsAfterContinue(array &$result, int $iterator): void

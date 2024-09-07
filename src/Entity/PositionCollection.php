@@ -29,10 +29,29 @@ class PositionCollection implements \Iterator
 		$this->formMaps(static::ColumnsLength, static::RowsLength);
 	}
 
+	public function getRowsLength(): int
+	{
+		return static::RowsLength;
+	}
+
+	public function getColumnsLength(): int
+	{
+		return static::ColumnsLength;
+	}
+
 	public function getMaxDiagonalDimension(): int
 	{
 		return static::RowsLength - 1;
 	}
+
+	public function move(Movement $movement): void
+    {
+		if($movement->hasHitIndex())
+		{
+			$this->delete($movement->getHitIndex());
+		}
+        $this->swap($movement->getFromIndex(), $movement->getToIndex());
+    }
 
 	public function swap(int $key1, int $key2): object
 	{

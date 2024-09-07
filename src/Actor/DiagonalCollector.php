@@ -2,8 +2,10 @@
 
 namespace Arknet\LineReracer\Actor;
 
-use Arknet\LineReracer\Trait\Initor\Gameable;
+use Arknet\LineReracer\Trait\Initor\Indexable;
+use Arknet\LineReracer\Trait\Initor\Lengthable;
 use Arknet\LineReracer\Entity\DiagonalCollection;
+use Arknet\LineReracer\Entity\MovementsCollection;
 use Arknet\LineReracer\Trait\Brancher\DirectionMap;
 use Arknet\LineReracer\Exception\IndexNotFoundException;
 use Arknet\LineReracer\Exception\ParamsNotSettedException;
@@ -11,11 +13,7 @@ use Arknet\LineReracer\Trait\Initor\PositionCollectionable;
 
 class DiagonalCollector
 {
-    use Gameable, PositionCollectionable;
-
-    private int $index;
-
-    private int $length;
+    use DirectionMap, Lengthable, Indexable, PositionCollectionable;
 
     private int $x;
 
@@ -34,14 +32,6 @@ class DiagonalCollector
         return $this;
     }
 
-    public function continueCompute(): void
-    {
-        for($iterator = 0; $iterator < $this->length; $iterator++)
-        {
-            $this->addElementsToDiagonal($iterator);
-        }
-    }
-
     public function hasJump(): bool
     {
         return $this->getFirstDiagonalCollection()->hasJump() ||
@@ -50,52 +40,66 @@ class DiagonalCollector
         $this->getFourthDiagonalCollection()->hasJump();
     }
 
-    public function setIndex(int $index): object
+    public function getJumps(): MovementsCollection
     {
-        $this->index = $index;
-        return $this;
+        return $this->getFirstDiagonalCollection()->getJumps()->merge($this->getSecondDiagonalCollection()->getJumps()->merge(
+            $this->getThirdDiagonalCollection()->getJumps()->merge(
+                $this->getFourthDiagonalCollection()->getJumps()
+            )
+        ));
     }
 
-    public function setLength(int $length): object
+    public function getSteps(): MovementsCollection
     {
-        $this->length = $length;
-        return $this;
+        $DCS1 = $this->getFirstDiagonalCollection()->getSteps();
+        $DCS2 = $this->getSecondDiagonalCollection()->getSteps();
+        $DCS3 = $this->getThirdDiagonalCollection()->getSteps();
+        $DCS4 = $this->getFourthDiagonalCollection()->getSteps();
+        return $DCS1->merge($DCS2->merge($DCS3->merge($DCS4)));
     }
 
-    public function getFirstDiagonalCollection(): DiagonalCollection
+    private function getFirstDiagonalCollection(): DiagonalCollection
     {
         if(!isset($this->firstDiagonalCollection))
         {
-            $this->firstDiagonalCollection = $this->getNewDiagonalCollection(DirectionMap::DirectionNE);
+            $this->firstDiagonalCollection = $this->getNewDiagonalCollection(static::DirectionNE);
         }
         return $this->firstDiagonalCollection;
     }
 
-    public function getSecondDiagonalCollection(): DiagonalCollection
+    private function getSecondDiagonalCollection(): DiagonalCollection
     {
         if(!isset($this->secondDiagonalCollection))
         {
-            $this->secondDiagonalCollection = $this->getNewDiagonalCollection(DirectionMap::DirectionSE);
+            $this->secondDiagonalCollection = $this->getNewDiagonalCollection(static::DirectionSE);
         }
         return $this->secondDiagonalCollection;
     }
 
-    public function getThirdDiagonalCollection(): DiagonalCollection
+    private function getThirdDiagonalCollection(): DiagonalCollection
     {
         if(!isset($this->thirdDiagonalCollection))
         {
-            $this->thirdDiagonalCollection = $this->getNewDiagonalCollection(DirectionMap::DirectionSW);
+            $this->thirdDiagonalCollection = $this->getNewDiagonalCollection(static::DirectionSW);
         }
         return $this->thirdDiagonalCollection;
     }
 
-    public function getFourthDiagonalCollection(): DiagonalCollection
+    private function getFourthDiagonalCollection(): DiagonalCollection
     {
         if(!isset($this->fourthDiagonalCollection))
         {
-            $this->fourthDiagonalCollection = $this->getNewDiagonalCollection(DirectionMap::DirectionNW);
+            $this->fourthDiagonalCollection = $this->getNewDiagonalCollection(static::DirectionNW);
         }
         return $this->fourthDiagonalCollection;
+    }
+
+    private function continueCompute(): void
+    {
+        for($iterator = 1; $iterator <= $this->length; $iterator++)
+        {
+            $this->addElementsToDiagonal($iterator);
+        }
     }
 
     private function getNewDiagonalCollection(string $direction): DiagonalCollection
@@ -121,22 +125,22 @@ class DiagonalCollector
 
     private function addToFirstDiagonal(int $iterator): void
     {
-        $this->addFirstElementByCoordinates($this->x+$iterator, $this->y+$iterator);
+        $this->addFirstElementByCoordinates($this->x+$iterator, $this->y-$iterator);
     }
     
     private function addToSecondDiagonal(int $iterator): void
     {
-        $this->addSecondElementByCoordinates($this->x+$iterator, $this->y-$iterator);
+        $this->addSecondElementByCoordinates($this->x+$iterator, $this->y+$iterator);
     }
 
     private function addToThirdDiagonal(int $iterator): void
     {
-        $this->addThirdElementByCoordinates($this->x-$iterator, $this->y-$iterator);
+        $this->addThirdElementByCoordinates($this->x-$iterator, $this->y+$iterator);
     }
 
     private function addToFourthDiagonal(int $iterator): void
     {
-        $this->addFourthElementByCoordinates($this->x+$iterator, $this->y+$iterator);
+        $this->addFourthElementByCoordinates($this->x-$iterator, $this->y-$iterator);
     }
 
     private function addFirstElementByCoordinates(int $x, int $y): void

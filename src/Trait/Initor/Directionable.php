@@ -6,7 +6,7 @@ use Arknet\LineReracer\Definition\Game;
 
 trait Directionable
 {
-    private direction $direction;
+    private string $direction;
 
     public function setDirection(string $direction): object
     {
@@ -14,7 +14,7 @@ trait Directionable
         return $this;
     }
 
-    public function getDirection(): int
+    public function getDirection(): string
     {
         return $this->direction;
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Arknet\LineReracer\Trait\Brancher;
+namespace Arknet\LineReracer\Trait\Utils;
 
 use Arknet\LineReracer\Contracts\Entity\GameElement;
 
