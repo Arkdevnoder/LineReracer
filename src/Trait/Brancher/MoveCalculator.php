@@ -3,6 +3,8 @@
 namespace Arknet\LineReracer\Trait\Brancher;
 
 use Arknet\LineReracer\Entity\Movement;
+use Arknet\LineReracer\Entity\Emptiness;
+use Arknet\LineReracer\Definition\Displayer;
 use Arknet\LineReracer\Actor\DiagonalCollector;
 use Arknet\LineReracer\Trait\Initor\Indexesable;
 use Arknet\LineReracer\Entity\MovementCollection;
@@ -25,11 +27,21 @@ trait MoveCalculator
     }
 
     public function getMovementsCollection(): MovementsCollection {
+        $this->setBasePositionAndWalk();
+        return $this->getResult();
+    }
+
+    private function setBasePositionAndWalk(): void
+    {
+        $this->rangeIndexes();
+    }
+
+    private function rangeIndexes(): void
+    {
         foreach($this->indexes as $index)
         {
             $this->walk([], $index);
         }
-        return $this->getResult();
     }
 
     private function walk(array $trace, int $index): void
@@ -40,55 +52,67 @@ trait MoveCalculator
 
     private function walkFromMovements(MovementsCollection $movements, array $trace): void
     {
-        $this->preWalking($movements, $trace);
-        if(static::IsRecursive)
-        {
-            $this->movementsProcessing($movements, $trace);
-        }
+        static::IsRecursive && !($movements->isEmpty())
+        ? $this->movementsProcessing($movements, $trace)
+        : $this->setResultIfNoMovements($movements, $trace);
     }
 
     private function movementsProcessing(MovementsCollection $movements, array $trace): void
     {
-        foreach($movements as $jumpMovementCollection)
+        foreach($movements->getVector() as $movementCollection)
         {
-            $this->getPositionCollection()->move($jumpMovementCollection->getVector()[0]);
-            $this->walk(array_merge($trace, [$movements]), $jumpMovementCollection->getVector()[0]->getToIndex());
+            $this->movementCore($movementCollection, array_merge($trace, [$movementCollection]));
         }
     }
 
-    private function preWalking(MovementsCollection $movements, array $trace): void
+    private function movementCore(MovementCollection $movementCollection, array $trace): void
     {
-        $this->setResultIfNoMovements($movements, $trace);
+        $initialVector = $this->getPositionCollection()->getVector();
+        $movement = $movementCollection->getVector()[0];
+        $this->getPositionCollection()->move($movement);
+        $this->walk($trace, $movementCollection->getVector()[0]->getToIndex());
+        $this->getPositionCollection()->setVector($initialVector);
     }
 
     private function setResultIfNoMovements(MovementsCollection $movements, array $trace): void
     {
         if($movements->countVector() == 0 || !static::IsRecursive)
         {
-            $trace = $this->getTrace($movements, $trace);
-            $this->updateResult($trace);
+            !static::IsRecursive ? $this->updateResult($this->getTrace($movements, $trace)) : $this->addResult($trace);
         }
+    }
+
+    private function addResult(array $trace): void
+    {
+        $newMovementCollection = new MovementCollection;
+        count($trace) == 0 ?: $this->traverseTrace($newMovementCollection, $trace);
+    }
+
+    private function traverseTrace(MovementCollection $newMovementCollection, array $trace): void
+    {
+        foreach($trace as $key => $movementCollection)
+        {
+            $newMovementCollection->add($movementCollection->getVector()[0]);
+        }
+        $this->getResult()->add($newMovementCollection);
     }
 
     private function getTrace(MovementsCollection $movements, array $trace): array
     {
-        return array_merge($trace, [$movements]);
+        if(!$movements->isEmpty())
+        {
+            return array_merge($trace, [$movements]);
+        }
+        return $trace;
     }
 
     private function updateResult(array $trace): void
     {
-        foreach($trace as $movementsCollection)
+        foreach($trace as $key => $movementsCollection)
         {
-            $this->updateResultWithMovementsCollection($movementsCollection);
+            !isset($trace[$key-1]) ?: $trace[$key]->merge($trace[$key - 1]);
         }
-    }
-
-    private function updateResultWithMovementsCollection(MovementsCollection $movementsCollection): void
-    {
-        foreach($movementsCollection as $movementCollection)
-        {
-            $this->getResult()->add($movementCollection);
-        }
+        !isset($key) ?: $this->getResult()->merge($trace[$key]);
     }
 
     private function getDiagonalCollector(int $index): DiagonalCollector

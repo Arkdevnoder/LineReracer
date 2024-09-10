@@ -43,16 +43,15 @@ class FreeToJumpingConvertor
 
     private function performIndex(int $index): void
     {
-        if($this->getPositionCollection()->get($index)->isQueen())
-        {
-            $this->performQueenIndex($index);
-        }
-        $this->performPieceIndex($index);
+        $this->getPositionCollection()->get($index)->isQueen()
+        ? $this->performQueenIndex($index)
+        :  $this->performPieceIndex($index);
     }
 
     private function performQueenIndex(int $index): void
     {
-        if($this->getNewQueenDiagonalCollector($index)->hasJump())
+        $diagonalCollector = $this->getNewQueenDiagonalCollector($index);
+        if($diagonalCollector->hasJump())
         {
             $this->resultIndexes[] = $index;
         }

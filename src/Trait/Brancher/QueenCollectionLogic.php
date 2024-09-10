@@ -16,35 +16,41 @@ trait QueenCollectionLogic
 
     public function getQueenSteps(): MovementsCollection
     {
-        $emptyIndexes = $this->convertIteratorsToIndexes($this->getEmptyIteratorsAfter(0));
+		$iterators = $this->getEmptyIteratorsAfter(-1);
+        $emptyIndexes = $this->convertIteratorsToIndexes($iterators);
 		return $this->getMovementsCollectionBasedOnIndexes(new MovementsCollection, $emptyIndexes);
     }
 
     public function getQueenNearestJumps(): MovementsCollection
 	{
-		$this->hasQueenJump();
+		$checkFlag = $this->hasQueenJump();
+		return $checkFlag === true ? $this->getQueenNearestJumpsContinue() : new MovementsCollection;
+	}
+
+	public function getQueenNearestJumpsContinue(): MovementsCollection
+	{
 		$emptyIterators = $this->getEmptyIteratorsAfter($this->hitIterator);
         $emptyIndexes = $this->convertIteratorsToIndexes($emptyIterators);
 		return $this->getMovementsCollectionBasedOnIndexes(new MovementsCollection, $emptyIndexes);
 	}
 	
-	public function hasQueenJump(): bool
+	private function hasQueenJump(): bool
 	{
 		for($key = 0; ($key < $this->countVector()) && (($hasJump ?? 0) == 0); $key++)
 		{
-			$hasJump += (int) $this->isJumpableQueenKey($key);
+			$hasJump = ($hasJump ?? 0) + (int) $this->isJumpableQueenKey($key);
 		}
 		return (($hasJump ?? 0) > 0);
 	}
 
-    public function getEmptyIteratorsAfter(int $iterator): array
+    private function getEmptyIteratorsAfter(int $iterator): array
 	{
 		$result = [];
 		$this->getEmptyIteratorsAfterContinue($result, $iterator);
 		return $result;
 	}
 
-	public function getMovementsCollectionBasedOnIndexes(
+	private function getMovementsCollectionBasedOnIndexes(
 		MovementsCollection $movementsCollection,
 		array $emptyIndexes
 	): MovementsCollection {
@@ -57,18 +63,27 @@ trait QueenCollectionLogic
 
 	private function addToMovementsCollection(
 		MovementsCollection &$movementsCollection,
-		array $emptyIndex
+		int $emptyIndex
 	): void {
-		$movementsCollection->add((new MovementCollection)->add(
-			(new Movement())->setFromIndex($this->getIndex())->setHitIndex(
-                $this->convertIteratorsToIndexes([$this->hitIterator])[0]
-            )->setToIndex($emptyIndex)
-		));
+		$movementCollection = (new MovementCollection)->add($this->getMovement($emptyIndex));
+		$movementsCollection->add($movementCollection);
+	}
+
+	private function getMovement(int $emptyIndex): Movement
+	{
+		return $this->hitIterator !== -1
+		? (new Movement())->setFromIndex($this->getIndex())->setHitIndex($this->getHitIndex())->setToIndex($emptyIndex)
+		: (new Movement())->setFromIndex($this->getIndex())->setToIndex($emptyIndex);
+	}
+
+	private function getHitIndex(): int
+	{
+		return $this->convertIteratorsToIndexes([$this->hitIterator])[0];
 	}
 
 	private function getEmptyIteratorsAfterContinue(array &$result, int $iterator): void
 	{
-		for($key = $iterator+1; ($key < $this->countVector()) && (($hasEmptiness ?? false) === false); $key++)
+		for($key = $iterator+1; ($key < $this->countVector()) && (($hasEmptiness ?? true) === true); $key++)
 		{
 			$hasEmptiness = $this->addResultIfNotEmptiness($result, $key);
 		}
@@ -91,12 +106,13 @@ trait QueenCollectionLogic
 
 	private function isJumpableQueenKey(int $key): bool
 	{
-		$checkFlag = $this->hasOnlyOneEnemy($this->getBetween(0, $key));
-		$this->cacheHitIndex($checkFlag);
+		$between = $this->getBetween(0, $key);
+		$checkFlag = $this->hasOnlyOneEnemy($between);
+		$this->cacheHitIndex($checkFlag, $key);
 		return ($key !== 0) && ($this->getVector()[$key] instanceof Emptiness) && $checkFlag;
 	}
 
-	private function cacheHitIndex(bool $checkFlag, int $key): bool
+	private function cacheHitIndex(bool $checkFlag, int $key): void
 	{
 		if($this->hitIterator == -1 && $checkFlag)
 		{
@@ -107,7 +123,8 @@ trait QueenCollectionLogic
 	private function hasOnlyOneEnemy(array $elements): bool
 	{
 		$gameElement = $this->getPositionCollection()->get($this->getIndex());
-		return ($this->countEnemies($elements, $gameElement) === 1) &&
-		($this->countAllies($elements, $gameElement) === 0);
+		$firstFlag = ($this->countEnemies($elements, $gameElement) === 1);
+		$secondFlag = ($this->countAllies($elements, $gameElement) === 0);
+		return $firstFlag && $secondFlag;
 	}
 }

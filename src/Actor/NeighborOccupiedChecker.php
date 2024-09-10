@@ -49,7 +49,7 @@ class NeighborOccupiedChecker
 		$c2 = strtolower($this->getGameElementFirst());
 		$c3 = strtolower($this->getGameElementSecond());
 		$c4 = strtolower($this->getGameElementThird());
-		return !(($c1 == $c2) && ($c2 == $c3) && ($c3 == $c4) == ($c4 == strtolower($this->getGameElementFourth())));
+		return !(($c1 == $c2) && ($c2 == $c3) && ($c3 == $c4) && ($c4 == strtolower($this->getGameElementFourth())));
 	}
 
 	private function getGameElementCenter(): string

@@ -2,6 +2,7 @@
 
 namespace Arknet\LineReracer\Actor;
 
+use Arknet\LineReracer\Definition\Displayer;
 use Arknet\LineReracer\Entity\MovementsCollection;
 use Arknet\LineReracer\Trait\Brancher\MoveCalculator;
 
@@ -13,6 +14,8 @@ class JumpsMoveCalculator
     
     private function getMovements(int $index): MovementsCollection
     {
-        return $this->getDiagonalCollector($index)->compute()->getJumps();
+        $diagonalCollector = $this->getDiagonalCollector($index);
+        $jumps = $diagonalCollector->compute()->getJumps();
+        return $jumps;
     }
 }

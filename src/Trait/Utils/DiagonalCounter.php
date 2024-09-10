@@ -10,7 +10,7 @@ trait DiagonalCounter
 	{
 		foreach($elements as $element)
 		{
-			$result += (int) $gameElement->isEnemy($element);
+			$result = ($result ?? 0) + (int) $gameElement->isEnemy($element);
 		}
 		return (int) ($result ?? 0);
 	}
@@ -19,7 +19,7 @@ trait DiagonalCounter
 	{
 		foreach($elements as $element)
 		{
-			$result += (int) $gameElement->isAlly($element);
+			$result = ($result ?? 0) + (int) $gameElement->isAlly($element);
 		}
 		return (int) ($result ?? 0);
 	}

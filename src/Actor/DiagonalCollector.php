@@ -34,19 +34,20 @@ class DiagonalCollector
 
     public function hasJump(): bool
     {
-        return $this->getFirstDiagonalCollection()->hasJump() ||
-        $this->getSecondDiagonalCollection()->hasJump() ||
-        $this->getThirdDiagonalCollection()->hasJump() ||
-        $this->getFourthDiagonalCollection()->hasJump();
+        $DCC1 = $this->getFirstDiagonalCollection()->hasJump();
+        $DCC2 = $this->getSecondDiagonalCollection()->hasJump();
+        $DCC3 = $this->getThirdDiagonalCollection()->hasJump();
+        $DCC4 = $this->getFourthDiagonalCollection()->hasJump();
+        return $DCC1 || $DCC2 || $DCC3 || $DCC4;
     }
 
     public function getJumps(): MovementsCollection
     {
-        return $this->getFirstDiagonalCollection()->getJumps()->merge($this->getSecondDiagonalCollection()->getJumps()->merge(
-            $this->getThirdDiagonalCollection()->getJumps()->merge(
-                $this->getFourthDiagonalCollection()->getJumps()
-            )
-        ));
+        $DCJ1 = $this->getFirstDiagonalCollection()->getJumps();
+        $DCJ2 = $this->getSecondDiagonalCollection()->getJumps();
+        $DCJ3 = $this->getThirdDiagonalCollection()->getJumps();
+        $DCJ4 = $this->getFourthDiagonalCollection()->getJumps();
+        return $DCJ1->merge($DCJ2->merge($DCJ3->merge($DCJ4)));
     }
 
     public function getSteps(): MovementsCollection

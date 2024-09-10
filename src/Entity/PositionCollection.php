@@ -29,6 +29,24 @@ class PositionCollection implements \Iterator
 		$this->formMaps(static::ColumnsLength, static::RowsLength);
 	}
 
+	public function getNotation(): string
+	{
+		foreach($this->getVector() as $element)
+		{
+			$result[] = ($element->getValue() == "") ? "e" : $element->getValue();
+		}
+		return implode(",", $result ?? []);
+	}
+
+	public function setNotation(string $notation): void
+	{
+		$this->vector = [];
+		foreach(explode(",", $notation) as $element)
+		{
+			$this->vector[] = $element == "e" ? (new Emptiness) : (new Piece)->set($element);
+		}
+	}
+
 	public function getRowsLength(): int
 	{
 		return static::RowsLength;
@@ -56,7 +74,15 @@ class PositionCollection implements \Iterator
 	public function swap(int $key1, int $key2): object
 	{
 		[$this->vector[$key1], $this->vector[$key2]] = [$this->vector[$key2], $this->vector[$key1]];
+		$check = $this->isIndexInEdge($key2);
+		!$check ?: $this->vector[$key2]->toQueen(); 
 		return $this;
+	}
+
+	public function isIndexInEdge(int $index): bool
+	{
+		$coordinates = $this->getCoordinatesByIndex($index);
+		return $coordinates[1] == 0 || $coordinates[1] == ($this->getRowsLength() - 1);
 	}
 
 	public function delete(int $key): object

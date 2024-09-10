@@ -26,7 +26,8 @@ class Piece implements GameElement
 
 	public function isEnemy(GameElement $gameElement): bool
 	{
-		return strtolower($gameElement->getValue()) !== strtolower($this->value);
+		return (strtolower($gameElement->getValue()) !== strtolower($this->value)) &&
+		$this->isPiece($gameElement->getValue());
 	}
 
 	public function isAlly(GameElement $gameElement): bool

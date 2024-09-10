@@ -40,7 +40,7 @@ class Board implements Action
 
 	public function displayWithMoves(): void
 	{
-		//echo chr(27).chr(91).'H'.chr(27).chr(91).'J';
+		echo chr(27).chr(91).'H'.chr(27).chr(91).'J';
 		(new Displayer)->setPositionCollection($this->getPositionCollection())->out();
 		$this->getPossibleMoves()->display();
 		echo PHP_EOL;

@@ -38,9 +38,9 @@ class MovementsCollection implements \Iterator
 
 	private function getStringArray(): array
 	{
-		foreach($this->getArray() as $iterator => $movement)
+		foreach($this->getArray() as $movement)
 		{
-			$result[] = $this->getTurns($iterator, $movement);
+			$result[] = $this->getPart($movement);
 		}
 		return $result ?? [];
 	}
@@ -54,13 +54,13 @@ class MovementsCollection implements \Iterator
 		return implode(PHP_EOL, $result ?? []);
 	}
 
-	private function getTurns(int $iterator, array $movement): string
+	private function getPart(array $movement): string
 	{
-		foreach($movement as $turn)
+		foreach($movement as $iterator => $turn)
 		{
 			$turns = isset($turns) ? $turns.$this->getChunk($iterator, $turn) : $this->getChunk($iterator, $turn);
 		}
-		return $turns;
+		return $turns ?? "";
 	}
 
 	private function getChunk(int $iterator, array $turn): string
