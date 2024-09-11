@@ -8,17 +8,17 @@ use Arknet\LineReracer\Definition\Game;
 
 $game = (new Game);
 
-$notationGame = "e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,b,b,e,e,W,e,e,e";
-notationGame($game, $notationGame);
+//$notationGame = "b,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,w";
+//notationGame($game, $notationGame);
 
 //setMovesGame($game);
-//justGame($game);
+justGame($game);
 
 function notationGame($game, $notation)
 {
     $game->getTurn()->setWhite();
     $game->getBoard()->getPositionCollection()->setNotation($notation);
-    $game->getBoard()->displayWithMoves();
+    //$game->getBoard()->displayWithMoves();
 }
 
 function setMovesGame($game)
@@ -32,10 +32,12 @@ function setMovesGame($game)
 
 function justGame($game)
 {
-    while(true)
+    while(!$game->isOver())
     {
         $game->getBoard()->displayWithMoves();
         $move = readline("Enter move: ");
         $game->getBoard()->moveByIndex((int) $move);
     }
+    $game->getBoard()->displayWithMoves();
+    echo $game->getTurn()->getOppositeValue()." wins!".PHP_EOL.PHP_EOL;
 }

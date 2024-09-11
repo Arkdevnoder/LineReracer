@@ -41,6 +41,11 @@ class Turn
 		$this->isWhite() ? $this->setBlack() : $this->setWhite();
 	}
 
+	public function getOppositeValue(): string
+	{
+		return $this->isWhite() ? static::Black : static::White;
+	}
+
 	public function getValue(): string
 	{
 		return $this->value;

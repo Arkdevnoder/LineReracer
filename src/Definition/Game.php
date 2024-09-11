@@ -41,6 +41,11 @@ class Game implements Merger
 		return $this->getServiceContainer()->get("turn");
 	}
 
+	public function isOver(): bool
+	{
+		return $this->getBoard()->getCurrentPossibleMoves()->countVector() === 0;
+	}
+
 	private function setBoard(): Game
 	{
 		$this->serviceContainer->set("board", (new Board($this->getPositionCollection()))->setGame($this));

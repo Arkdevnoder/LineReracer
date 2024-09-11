@@ -53,7 +53,7 @@ class Tolerance
 
 	private function generateStepsIndexes(): void
 	{
-		$this->stepsIndexes = array_diff($this->freeIndexes, $this->jumpingIndexes);
+		$this->stepsIndexes = array_diff($this->freeIndexes ?? [], $this->jumpingIndexes ?? []);
 	}
 
 	private function generateFreeIndexes(): void
@@ -72,7 +72,7 @@ class Tolerance
 	private function getFreeToJumpingConvertor(): FreeToJumpingConvertor
 	{
 		return (new FreeToJumpingConvertor())->setGame($this->getGame())
-		->setPositionCollection($this->positionCollection)->setFreeIndexes($this->freeIndexes);
+		->setPositionCollection($this->positionCollection)->setFreeIndexes($this->freeIndexes ?? []);
 	}
 
 	private function fieldComputing(int $index): void
