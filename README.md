@@ -51,3 +51,5 @@ Computed minimax alpha-beta prunning moves:
 ```php
 $game->getEngine()->compute()->getResult();
 ```
+
+License: MIT
