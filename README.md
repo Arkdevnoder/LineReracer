@@ -1,15 +1,15 @@
-### Draughts, or checkers, or "shashki".
+# Draughts, or checkers, or "shashki".
 
 This is library with PHP API.
 
-# Features:
+### Features:
 - [x] Got possible moves
 - [x] Board positions
 - [x] Game and board API
 - [x] Minimax alpha-beta prunning AI
 - [x] Evaluator API
 
-# Compuser installation:
+### Compuser installation:
 ```json
 {
   "repositories": [
