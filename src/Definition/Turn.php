@@ -26,6 +26,12 @@ class Turn
 		return $this;
 	}
 
+	public function setValue(string $value): Turn
+	{
+		$this->value = $value;
+		return $this;
+	}
+
 	public function isWhite(): bool
 	{
 		return $this->value == static::White;

@@ -85,6 +85,12 @@ class Piece implements GameElement
 		return $this;
 	}
 
+	public function toPiece(): Piece
+	{
+		$this->value = strtolower($this->value);
+		return $this;
+	}
+
 	public function set(string $piece): Piece
 	{
 		$this->setValue($piece);

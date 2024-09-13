@@ -8,17 +8,14 @@ use Arknet\LineReracer\Definition\Game;
 
 $game = (new Game);
 
-//$notationGame = "b,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,w";
-//notationGame($game, $notationGame);
-
-//setMovesGame($game);
+//$notation = "b,b,b,b,b,b,b,b,b,b,e,b,e,e,b,e,w,e,e,e,e,w,w,w,w,w,w,w,w,w,w,w";
+//notationGame($game, $notation);
 justGame($game);
 
 function notationGame($game, $notation)
 {
-    $game->getTurn()->setWhite();
+    $game->getTurn()->setBlack();
     $game->getBoard()->getPositionCollection()->setNotation($notation);
-    //$game->getBoard()->displayWithMoves();
 }
 
 function setMovesGame($game)
@@ -34,7 +31,10 @@ function justGame($game)
 {
     while(!$game->isOver())
     {
+        $computer = $game->getEngine()->compute();
+        $hints = $computer->getResult();
         $game->getBoard()->displayWithMoves();
+        var_dump($hints);
         $move = readline("Enter move: ");
         $game->getBoard()->moveByIndex((int) $move);
     }

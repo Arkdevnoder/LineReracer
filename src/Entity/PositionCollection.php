@@ -6,11 +6,12 @@ use Arknet\LineReracer\Entity\Piece;
 use Arknet\LineReracer\Entity\Emptiness;
 use Arknet\LineReracer\Contracts\Entity\GameElement;
 use Arknet\LineReracer\Exception\IndexNotFoundException;
+use Arknet\LineReracer\Trait\Brancher\PositionInitializer;
 use Arknet\LineReracer\Trait\Collection\VectorPropertiesElement;
 
 class PositionCollection implements \Iterator
 {
-	use VectorPropertiesElement;
+	use VectorPropertiesElement, PositionInitializer;
 
 	public const RowsLength = 8;
 	public const ColumnsLength = 8;
@@ -31,11 +32,19 @@ class PositionCollection implements \Iterator
 
 	public function getNotation(): string
 	{
-		foreach($this->getVector() as $element)
+		$result = [];
+		$this->getNotationContinue($result);
+		$string = implode(",", $result ?? []);
+		return $string;
+	}
+
+	private function getNotationContinue(array &$result): void
+	{
+		$vector = $this->getVector();
+		for($j = 0; $j < count($vector); $j++)
 		{
-			$result[] = ($element->getValue() == "") ? "e" : $element->getValue();
+			$result[] = ($vector[$j]->getValue() == "") ? "e" : $vector[$j]->getValue();
 		}
-		return implode(",", $result ?? []);
 	}
 
 	public function setNotation(string $notation): void
@@ -75,14 +84,15 @@ class PositionCollection implements \Iterator
 	{
 		[$this->vector[$key1], $this->vector[$key2]] = [$this->vector[$key2], $this->vector[$key1]];
 		$check = $this->isIndexInEdge($key2);
-		!$check ?: $this->vector[$key2]->toQueen(); 
+		!$check ?: $this->vector[$key2]->toQueen();
 		return $this;
 	}
 
 	public function isIndexInEdge(int $index): bool
 	{
 		$coordinates = $this->getCoordinatesByIndex($index);
-		return $coordinates[1] == 0 || $coordinates[1] == ($this->getRowsLength() - 1);
+		return ($this->get($index)->isWhite() && $coordinates[1] == 0)
+		|| ($this->get($index)->isBlack() && $coordinates[1] == ($this->getRowsLength() - 1));
 	}
 
 	public function delete(int $key): object
@@ -158,133 +168,4 @@ class PositionCollection implements \Iterator
 		}
 	}
 
-	private function initializeRows(): void
-	{
-		$this->initializeVector();
-		$this->initializeBlackRows();
-		$this->initializeEmptyRows();
-		$this->initializeWhiteRows();
-	}
-
-	private function initializeVector(): void
-	{
-		$this->vector = (array) null;
-	}
-
-	private function initializeBlackRows(): void
-	{
-		for($i = 0; $i < static::BlackRows; $i++)
-		{
-			$this->pushInitialBlackRow();
-		}
-	}
-
-	private function initializeEmptyRows(): void
-	{
-		for($i = 0; $i < static::EmptyRows; $i++)
-		{
-			$this->pushInitialVoidRow();
-		}
-	}
-
-	private function initializeWhiteRows(): void
-	{
-		for($i = 0; $i < static::WhiteRows; $i++)
-		{
-			$this->pushInitialWhiteRow();
-		}
-	}
-
-	private function pushInitialBlackRow(): void
-	{
-		for($i = 0; $i < static::PiecesInRow; $i++)
-		{
-			$this->vector[] = (new Piece)->setBlackPiece();
-		}
-	}
-
-	private function pushInitialWhiteRow(): void
-	{
-		for($i = 0; $i < static::PiecesInRow; $i++)
-		{
-			$this->vector[] = (new Piece)->setWhitePiece(); 
-		}
-	}
-
-	private function pushInitialVoidRow(): void
-	{
-		for($i = 0; $i < static::PiecesInRow; $i++)
-		{
-			$this->vector[] = (new Emptiness); 
-		}
-	}
-
-	private function formMaps(int $width, int $height): void
-	{
-		$this->formMap($width, $height);
-		$this->formReversedMap();
-	}
-
-	private function formReversedMap(): void
-	{
-		foreach($this->getMap() as $index => $element)
-		{
-			$result[$element[0].",".$element[1]] = $index;
-		}
-		$this->reversedMap = $result ?? [];
-	}
-
-	private function formMap(int $width, int $height): void
-	{
-		for($index = 0; $index < $height; $index++)
-		{
-			$this->formRowMap($width, $index);
-		}
-	}
-
-	private function formRowMap(int $width, int $index): void
-	{
-		for($selector = 0; $selector < $width; $selector++)
-		{
-			$this->formField($selector, $index);
-		}
-	}
-
-	private function formField(int $x, int $y): void
-	{
-		$this->wrapFormEvenRowField($x, $y);
-		$this->wrapFormNotEvenRowField($x, $y);
-	}
-
-	private function wrapFormEvenRowField(int $x, int $y): void
-	{
-		if($y % 2 == 0)
-		{
-			$this->formEvenRowField($x, $y);
-		}
-	}
-
-	private function wrapFormNotEvenRowField(int $x, int $y): void
-	{
-		if(!($y % 2 == 0))
-		{
-			$this->formNotEvenRowField($x, $y);
-		}
-	}
-
-	private function formEvenRowField(int $x, int $y): void
-	{
-		if(!($x % 2 == 0))
-		{
-			$this->map[] = [$x, $y];
-		}
-	}
-
-	private function formNotEvenRowField(int $x, int $y): void
-	{
-		if($x % 2 == 0)
-		{
-			$this->map[] = [$x, $y];
-		}
-	}
 }

@@ -79,4 +79,9 @@ trait VectorPropertiesElement
 	{
 		return $this->countVector() === 0;
 	}
+	
+	public function getEnd(): object
+	{
+		return $this->vector[count($this->vector) - 1];
+	}
 }

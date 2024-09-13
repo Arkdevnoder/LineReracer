@@ -4,6 +4,7 @@ namespace Arknet\LineReracer\Definition;
 
 use Arknet\LineReracer\Actor\Tolerance;
 use Arknet\LineReracer\Entity\Movement;
+use Arknet\LineReracer\Entity\Emptiness;
 use Arknet\LineReracer\Trait\Initor\Gameable;
 use Arknet\LineReracer\Contracts\Board\Action;
 use Arknet\LineReracer\Entity\PositionCollection;
@@ -29,7 +30,9 @@ class Board implements Action
 
 	public function getPossibleMoves(): MovementsCollection
 	{
-		$this->currentPossibleMoves = $this->getTolerance()->getMovementsCollection();
+		$tolerance = $this->getTolerance();
+		$moves = $tolerance->getMovementsCollection();
+		$this->currentPossibleMoves = $moves;
 		return $this->currentPossibleMoves;
 	}
 
@@ -41,7 +44,8 @@ class Board implements Action
 	public function displayWithMoves(): void
 	{
 		echo chr(27).chr(91).'H'.chr(27).chr(91).'J';
-		(new Displayer)->setPositionCollection($this->getPositionCollection())->out();
+		(new Displayer)->setPositionCollection($this->getPositionCollection())
+		->setEvaluator($this->getGame()->getEvaluator())->out();
 		$this->getPossibleMoves()->display();
 		echo PHP_EOL;
 	}
@@ -59,7 +63,7 @@ class Board implements Action
 
 	public function moveByIndexContinue(int $index): void
 	{
-		foreach($this->getCurrentPossibleMoves()->getVector()[$index - 1]->getVector() as $movement)
+		foreach($this->getPossibleMoves()->getVector()[$index - 1]->getVector() as $movement)
 		{
 			$this->applyMovement($movement);
 		}

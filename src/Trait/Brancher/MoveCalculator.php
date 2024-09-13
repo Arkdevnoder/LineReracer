@@ -69,9 +69,17 @@ trait MoveCalculator
     {
         $initialVector = $this->getPositionCollection()->getVector();
         $movement = $movementCollection->getVector()[0];
-        $this->getPositionCollection()->move($movement);
-        $this->walk($trace, $movementCollection->getVector()[0]->getToIndex());
+        $this->movementCoreContinue($movement, $trace);
         $this->getPositionCollection()->setVector($initialVector);
+    }
+
+    private function movementCoreContinue(Movement $movement, array $trace): void
+    {
+        $wasQueen = $this->getPositionCollection()->get($movement->getFromIndex())->isQueen();
+        $this->getPositionCollection()->move($movement);
+        $this->walk($trace, $movement->getToIndex());
+        !$this->getPositionCollection()->isIndexInEdge($movement->getToIndex()) || $wasQueen
+        ?: $this->getPositionCollection()->get($movement->getToIndex())->toPiece();
     }
 
     private function setResultIfNoMovements(MovementsCollection $movements, array $trace): void

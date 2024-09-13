@@ -2,9 +2,6 @@
 
 namespace Arknet\LineReracer\Definition;
 
-use Arknet\LineReracer\Definition\Board;
-use Arknet\LineReracer\Definition\Engine;
-use Arknet\LineReracer\Definition\Displayer;
 use Arknet\LineReracer\Entity\PositionCollection;
 use Arknet\LineReracer\Contracts\Registrator\Container\Merger;
 
@@ -15,10 +12,8 @@ class Game implements Merger
 	public function __construct()
 	{
 		$this->serviceContainer = new ServiceContainer();
+		$this->setEnvironment();
 		$this->setBoard();
-		$this->serviceContainer->set("engine", new Engine());
-		$this->serviceContainer->set("turn", new Turn());
-		$this->serviceContainer->set("displayer", new Displayer());
 	}
 
 	public function getBoard(): Board
@@ -41,9 +36,22 @@ class Game implements Merger
 		return $this->getServiceContainer()->get("turn");
 	}
 
+	public function getEvaluator(): Evaluator
+	{
+		return $this->getServiceContainer()->get("evaluator");
+	}
+
 	public function isOver(): bool
 	{
 		return $this->getBoard()->getCurrentPossibleMoves()->countVector() === 0;
+	}
+
+	private function setEnvironment(): void
+	{
+		$this->serviceContainer->set("turn", new Turn());
+		$this->serviceContainer->set("displayer", new Displayer());
+		$this->serviceContainer->set("engine", (new Engine())->setGame($this));
+		$this->serviceContainer->set("evaluator", (new Evaluator())->setGame($this));
 	}
 
 	private function setBoard(): Game

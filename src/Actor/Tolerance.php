@@ -17,7 +17,7 @@ class Tolerance
 	private array $freeIndexes;
 	private array $stepsIndexes;
 	private array $jumpingIndexes;
-	private PositionCollection $positionCollection;
+	public PositionCollection $positionCollection;
 	private MovementsCollection $movementsCollection;
 	private NeighborOccupiedChecker $neighborOccupiedChecker;
 
