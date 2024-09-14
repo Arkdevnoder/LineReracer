@@ -29,14 +29,20 @@ function setMovesGame($game)
 
 function justGame($game)
 {
+    $k = 0;
     while(!$game->isOver())
     {
         $computer = $game->getEngine()->compute();
         $hints = $computer->getResult();
         $game->getBoard()->displayWithMoves();
-        var_dump($hints);
+        if($k > 0)
+        {
+            $game->getBoard()->moveByIndex(array_search(min($hints), $hints)+1);
+        }
+        $game->getBoard()->displayWithMoves();
         $move = readline("Enter move: ");
         $game->getBoard()->moveByIndex((int) $move);
+        $k++;
     }
     $game->getBoard()->displayWithMoves();
     echo $game->getTurn()->getOppositeValue()." wins!".PHP_EOL.PHP_EOL;
