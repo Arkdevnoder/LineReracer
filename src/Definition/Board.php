@@ -43,10 +43,10 @@ class Board implements Action
 
 	public function displayWithMoves(): void
 	{
-		//echo chr(27).chr(91).'H'.chr(27).chr(91).'J';
+		echo chr(27).chr(91).'H'.chr(27).chr(91).'J';
 		(new Displayer)->setPositionCollection($this->getPositionCollection())
 		->setEvaluator($this->getGame()->getEvaluator())->setTurn($this->getGame()->getTurn())->out();
-		$this->getPossibleMoves()->display();
+		$this->getGame()->isDraw() ?: $this->getPossibleMoves()->display();
 		echo PHP_EOL;
 	}
 
@@ -54,7 +54,7 @@ class Board implements Action
 	{
 		$checker = $this->isMovementHasAttack($index);
 		$this->moveByIndexContinue($index);
-		$this->getGame()->getHistory()->addToList($this->getPositionCollection()->getNotation());
+		$this->getGame()->getHistory()->addToList($this->getGame()->getNotation());
 		$checker ? $this->nullNoBeats() : $this->getGame()->getTurn()->incrementNoBeatsMoves();
 	}
 

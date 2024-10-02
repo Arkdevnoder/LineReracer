@@ -71,7 +71,7 @@ class Game implements Merger
 		return $this->getBoard()->getPossibleMoves()->getArray();
 	}
 
-	public function setMove(): object
+	public function setMove(int $move): object
 	{
 		$this->getBoard()->moveByIndex((int) $move);
 		return $this;
@@ -82,6 +82,12 @@ class Game implements Merger
 		return $this->getEngine()->compute()->getResult();
 	}
 
+	public function getEngineMove(): int
+	{
+		$hints = $this->getEngineMoves();
+		return array_search(min($hints), $hints)+1;
+	}
+
 	public function setNotation(string $notation): object
 	{
 		$parts = explode("|", $notation);
@@ -89,6 +95,36 @@ class Game implements Merger
 		$turn = explode("-", $parts[0]);
 		$this->getTurn()->setValue($turn[0])->setNoBeatsMoves($turn[1]);
 		return $this;
+	}
+
+	public function display(): void
+	{
+		$this->getBoard()->displayWithMoves();
+	}
+
+	public function consoleCycle(): void
+	{
+		$this->display();
+        $this->setMove(readline("Enter move: "));
+        $this->setMove($this->getEngineMove());
+	}
+
+	public function consoleGameOver(): void
+	{
+		$this->display();
+		echo $this->isDraw() ? "Draw!" : $this->getTurn()->getOppositeValue()." wins!";
+		echo PHP_EOL.PHP_EOL;
+	}
+
+	public function setHistoryNotation(string $notation): object
+	{
+		$this->getHistory()->setNotation($notation);
+		return $this;
+	}
+
+	public function getHistoryNotation(): string
+	{
+		return $this->getHistory()->getNotation();
 	}
 
 	private function setEnvironment(): void

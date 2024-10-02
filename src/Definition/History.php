@@ -46,9 +46,9 @@ class History
     public function isDrawContinue(): bool
     {
         $index = count($this->list) - 1;
-        $condition1 = $this->list[$index];
-        $condition2 = $this->list[$index-4];
-        $condition3 = $this->list[$index - 8];
+        $condition1 = explode("|", $this->list[$index])[1];
+        $condition2 = explode("|", $this->list[$index-4])[1];
+        $condition3 = explode("|", $this->list[$index-8])[1];
         return $condition1 == ($condition2 == $condition3);
     }
 
