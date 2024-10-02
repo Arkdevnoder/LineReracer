@@ -2,12 +2,13 @@
 
 namespace Arknet\LineReracer\Definition;
 
+use Arknet\LineReracer\Trait\Initor\Turnable;
 use Arknet\LineReracer\Trait\Initor\Evaluatorable;
 use Arknet\LineReracer\Trait\Initor\PositionCollectionable;
 
 class Displayer
 {
-    use PositionCollectionable, Evaluatorable;
+    use Turnable, PositionCollectionable, Evaluatorable;
 
 	public function out(): void
     {
@@ -18,7 +19,8 @@ class Displayer
 
     private function outHeaderLine(): void
     {
-        echo "Score: ".$this->getEvaluator()->getRatio().PHP_EOL;
+        echo "Score: ".$this->getEvaluator()->getRatio()
+        .", noBeatsMoves: ".$this->getTurn()->getNoBeatsMoves().PHP_EOL;
         echo "==========================".PHP_EOL;
     }
 

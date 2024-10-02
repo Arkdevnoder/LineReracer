@@ -6,12 +6,21 @@ class Turn
 {
 	public const White = "white";
 	public const Black = "black";
+	public const MaximumNoBeatsMoves = 14;
 
 	private string $value;
+	private int $noBeatsMoves;
 
 	public function __construct()
 	{
 		$this->setWhite();
+		$this->setNullNoBeatsMoves();
+	}
+
+	public function setNoBeatsMoves(int $moves): Turn
+	{
+		$this->noBeatsMoves = $moves;
+		return $this;
 	}
 
 	public function setWhite(): Turn
@@ -45,6 +54,28 @@ class Turn
 	public function toggle(): void
 	{
 		$this->isWhite() ? $this->setBlack() : $this->setWhite();
+	}
+
+	public function incrementNoBeatsMoves(): Turn
+	{
+		$this->noBeatsMoves = $this->noBeatsMoves + 1;
+		return $this;
+	}
+
+	public function setNullNoBeatsMoves(): Turn
+	{
+		$this->setNoBeatsMoves(0);
+		return $this;
+	}
+
+	public function getNoBeatsMoves(): int
+	{
+		return $this->noBeatsMoves;
+	}
+
+	public function isDraw(): int
+	{
+		return $this->noBeatsMoves > static::MaximumNoBeatsMoves;
 	}
 
 	public function getOppositeValue(): string

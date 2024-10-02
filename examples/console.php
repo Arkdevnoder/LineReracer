@@ -8,13 +8,13 @@ use Arknet\LineReracer\Definition\Game;
 
 $game = (new Game);
 
-//$notation = "b,b,b,b,b,b,b,b,b,b,e,b,e,e,b,e,w,e,e,e,e,w,w,w,w,w,w,w,w,w,w,w";
-//notationGame($game, $notation);
+$notation = "B,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,e,W";
+notationGame($game, $notation);
 justGame($game);
 
 function notationGame($game, $notation)
 {
-    $game->getTurn()->setBlack();
+    //$game->getTurn()->setBlack();
     $game->getBoard()->getPositionCollection()->setNotation($notation);
 }
 
@@ -29,21 +29,21 @@ function setMovesGame($game)
 
 function justGame($game)
 {
-    $k = 0;
     while(!$game->isOver())
     {
-        $computer = $game->getEngine()->compute();
-        $hints = $computer->getResult();
-        $game->getBoard()->displayWithMoves();
-        if($k > 0)
-        {
-            $game->getBoard()->moveByIndex(array_search(min($hints), $hints)+1);
-        }
         $game->getBoard()->displayWithMoves();
         $move = readline("Enter move: ");
         $game->getBoard()->moveByIndex((int) $move);
-        $k++;
+        $computer = $game->getEngine()->compute();
+        $hints = $computer->getResult();
+        $game->getBoard()->moveByIndex(array_search(min($hints), $hints)+1);
     }
     $game->getBoard()->displayWithMoves();
-    echo $game->getTurn()->getOppositeValue()." wins!".PHP_EOL.PHP_EOL;
+    if(!$game->isDraw())
+    {
+        echo $game->getTurn()->getOppositeValue()." wins!".PHP_EOL.PHP_EOL;
+    } else {
+        echo "Draw!".PHP_EOL.PHP_EOL;
+    }
+    
 }

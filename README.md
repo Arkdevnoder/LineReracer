@@ -10,46 +10,40 @@ This is library with PHP API.
 - [x] Evaluator API
 
 ### Compuser installation:
-```json
-{
-  "repositories": [
-    {
-      "type": "path",
-      "url": "/path/to/this/lib"
-    }
-  ],
-  "require": {
-    "arknet/linereracer": "^0.0.1"
-  }
-}
+```
+composer require arknet/linereracer
 ```
 
 Game constructor:
 ```php
-$game = (new Game);
+$game = (new \Arknet\LineReracer\Definition\Game);
 ```
 
 Position setting:
 ```php
-$game->getBoard()->getPositionCollection()->setNotation(
-    "b,b,b,b,b,b,b,b,b,b,b,b,e,e,e,e,e,e,e,e,w,w,w,w,w,w,w,w,w,w,w,w"
-);
+$game->setNotation("white-0|b,b,b,b,b,b,b,b,b,b,b,b,e,e,e,e,e,e,e,e,w,w,w,w,w,w,w,w,w,w,w,w");
+//white-0 is color of movement and moves without beats
 ```
 
-Turn setting:
+Get position:
 ```php
-$game->getTurn()->setBlack();
-$game->getTurn()->setWhite();
+$game->getNotation();
 ```
 
 Possible moves:
 ```php
-$game->getBoard()->getPossibleMoves()->getArray();
+$game->getMoves();
 ```
+
+Set movement:
+```php
+$game->setMove((int) $index);
+```
+
 
 Computed minimax alpha-beta prunning moves:
 ```php
-$game->getEngine()->compute()->getResult();
+$game->getEngineMoves();
 ```
 
 License: MIT

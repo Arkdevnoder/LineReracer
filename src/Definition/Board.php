@@ -45,20 +45,27 @@ class Board implements Action
 	{
 		echo chr(27).chr(91).'H'.chr(27).chr(91).'J';
 		(new Displayer)->setPositionCollection($this->getPositionCollection())
-		->setEvaluator($this->getGame()->getEvaluator())->out();
+		->setEvaluator($this->getGame()->getEvaluator())->setTurn($this->getGame()->getTurn())->out();
 		$this->getPossibleMoves()->display();
 		echo PHP_EOL;
 	}
 
 	public function moveByIndex(int $index): void
 	{
+		$checker = $this->isMovementHasAttack($index);
 		$this->moveByIndexContinue($index);
-		$this->getGame();
+		$checker ?: $this->getGame()->getTurn()->incrementNoBeatsMoves();
 	}
 
 	public function getCurrentPossibleMoves(): MovementsCollection
 	{
 		return !($this->currentPossibleMoves->isEmpty()) ? $this->currentPossibleMoves : $this->getPossibleMoves();
+	}
+
+	public function isMovementHasAttack(int $index): bool
+	{
+		$vector = $this->getPossibleMoves()->getVector();
+		return $this->getPossibleMoves()->getVector()[$index - 1]->getVector()[0]->hasHitIndex();
 	}
 
 	public function moveByIndexContinue(int $index): void
