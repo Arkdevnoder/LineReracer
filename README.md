@@ -8,6 +8,9 @@ This is library with PHP API.
 - [x] Game and board API
 - [x] Minimax alpha-beta prunning AI
 - [x] Evaluator API
+- [x] History API
+- [x] Draw after 30 no beat-moves
+- [x] Draw after 3 retry moves
 
 ### Compuser installation:
 ```

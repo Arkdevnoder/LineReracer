@@ -33,4 +33,23 @@ class History
         $this->list = explode(":", $notation);
         return $this;
     }
+
+    public function isDraw(): bool
+    {
+        if(!empty($this->list) && count($this->list) > 11)
+        {
+            return $this->isDrawContinue();
+        }
+        return false;
+    }
+
+    public function isDrawContinue(): bool
+    {
+        $index = count($this->list) - 1;
+        $condition1 = $this->list[$index];
+        $condition2 = $this->list[$index-4];
+        $condition3 = $this->list[$index - 8];
+        return $condition1 == ($condition2 == $condition3);
+    }
+
 }

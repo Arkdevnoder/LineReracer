@@ -6,7 +6,7 @@ class Turn
 {
 	public const White = "white";
 	public const Black = "black";
-	public const MaximumNoBeatsMoves = 14;
+	public const MaximumNoBeatsMoves = 30;
 
 	private string $value;
 	private int $noBeatsMoves;

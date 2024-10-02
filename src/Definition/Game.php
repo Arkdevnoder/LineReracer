@@ -36,6 +36,11 @@ class Game implements Merger
 		return $this->getServiceContainer()->get("turn");
 	}
 
+	public function getHistory(): History
+	{
+		return $this->getServiceContainer()->get("history");
+	}
+
 	public function getEvaluator(): Evaluator
 	{
 		return $this->getServiceContainer()->get("evaluator");
@@ -43,13 +48,16 @@ class Game implements Merger
 
 	public function isOver(): bool
 	{
-		return $this->getBoard()->getCurrentPossibleMoves()->countVector() === 0
-		|| $this->getTurn()->isDraw();
+		$condition1 = $this->getBoard()->getCurrentPossibleMoves()->countVector() === 0;
+		$condition2 = $this->isDraw();
+		return $condition1 || $condition2;
 	}
 
 	public function isDraw(): bool
 	{
-		return $this->getTurn()->isDraw();
+		$condition1 = $this->getTurn()->isDraw();
+		$condition2 = $this->getHistory()->isDraw();
+		return $condition1 || $condition2;
 	}
 
 	public function getNotation(): string
