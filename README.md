@@ -14,7 +14,7 @@ This is library with PHP API.
 
 ### Compuser installation:
 ```
-composer require arknet/linereracer
+composer require arknet/linereracer:dev-master
 ```
 
 Game constructor:
