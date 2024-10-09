@@ -38,7 +38,7 @@ class Board implements Action
 
 	public function getPaginatedPossibleMovesArray(int $offset, int $length): array
 	{
-		return array_slice($this->getPossibleMoves()->getArray(), $offset, $length);
+		return array_slice($this->getPossibleMoves()->getArray(), $offset, $length, true);
 	}
 
 	public function display(): void
