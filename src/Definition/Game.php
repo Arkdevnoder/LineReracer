@@ -14,6 +14,7 @@ class Game implements Merger
 		$this->serviceContainer = new ServiceContainer();
 		$this->setEnvironment();
 		$this->setBoard();
+		$this->getHistory()->addToList($this->getNotation());
 	}
 
 	public function getBoard(): Board
