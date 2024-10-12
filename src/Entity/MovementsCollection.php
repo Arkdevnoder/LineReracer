@@ -26,6 +26,15 @@ class MovementsCollection implements \Iterator
 		return $result ?? [];
 	}
 
+	public function getStringArray(): array
+	{
+		foreach($this->getArray() as $movement)
+		{
+			$result[] = $this->getPart($movement);
+		}
+		return $result ?? [];
+	}
+
 	public function display(): void
 	{
 		echo $this->getNumeratedString();
@@ -34,15 +43,6 @@ class MovementsCollection implements \Iterator
 	private function getString(): string
 	{
 		return implode(PHP_EOL, $this->getStringArray());
-	}
-
-	private function getStringArray(): array
-	{
-		foreach($this->getArray() as $movement)
-		{
-			$result[] = $this->getPart($movement);
-		}
-		return $result ?? [];
 	}
 
 	private function getNumeratedString(): string
