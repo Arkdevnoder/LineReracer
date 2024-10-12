@@ -41,6 +41,11 @@ class Board implements Action
 		return array_slice($this->getPossibleMoves()->getArray(), $offset, $length, true);
 	}
 
+	public function getPaginatedPossibleMovesStringArray(int $offset, int $length): array
+	{
+		return array_slice($this->getPossibleMoves()->getStringArray(), $offset, $length, true);
+	}
+
 	public function display(): void
 	{
 		(new Displayer)->setPositionCollection($this->getPositionCollection())->out();
