@@ -86,7 +86,7 @@ class Game implements Merger
 	public function getEngineMove(): int
 	{
 		$hints = $this->getEngineMoves();
-		return array_search(min($hints), $hints)+1;
+		return empty($hints) ? -1 : array_search(min($hints), $hints)+1;
 	}
 
 	public function setNotation(string $notation): object
@@ -107,7 +107,8 @@ class Game implements Merger
 	{
 		$this->display();
         $this->setMove(readline("Enter move: "));
-        $this->setMove($this->getEngineMove());
+		$move = $this->getEngineMove();
+        $move == -1 ?: $this->setMove($move);
 	}
 
 	public function consoleGameOver(): void
