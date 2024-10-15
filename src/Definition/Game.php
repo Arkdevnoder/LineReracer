@@ -72,6 +72,11 @@ class Game implements Merger
 		return $this->getBoard()->getPossibleMoves()->getArray();
 	}
 
+	public function getStringMoves(): array
+	{
+		return $this->getBoard()->getPossibleMoves()->getStringArray();
+	}
+
 	public function setMove(int $move): object
 	{
 		$this->getBoard()->moveByIndex((int) $move);
