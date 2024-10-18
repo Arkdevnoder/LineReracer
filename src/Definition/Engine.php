@@ -14,7 +14,6 @@ class Engine
 	public function compute(): object
 	{
 		$this->getContinueContinue();
-		$this->reverseResult();
 		return $this;
 	}
 
@@ -47,29 +46,13 @@ class Engine
 	{
 		if($parameters["depth"] === 0)
 		{
-			return -$this->getRatio();
+			return $this->getRatio();
 		}
 
 		$moves = $this->getBoard()->getPossibleMoves();
 
 		if($this->getTurn()->isWhite())
 		{
-			$bestEvaluation = $this->getPlusBigValue();
-			foreach($moves as $movementCollection)
-			{	
-				$this->moveByMovementCollection($movementCollection);
-				$newHistory = $this->getHistory();
-				$bestEvaluation = min($bestEvaluation, $this->minimaxAlphaBeta(
-					$this->getDecreasedMinimaxArray($parameters), $newHistory
-				));
-				$this->undo($history);
-				$parameters["beta"] = min($parameters["beta"], $bestEvaluation);
-				if($parameters["beta"] <= $parameters["alpha"])
-				{
-					return $bestEvaluation;
-				}
-			}
-		} else {
 			$bestEvaluation = $this->getMinusBigValue();
 			foreach($moves as $movementCollection)
 			{
@@ -80,6 +63,22 @@ class Engine
 				));
 				$this->undo($history);
 				$parameters["alpha"] = max($parameters["alpha"], $bestEvaluation);
+				if($parameters["beta"] <= $parameters["alpha"])
+				{
+					return $bestEvaluation;
+				}
+			}
+		} else {
+			$bestEvaluation = $this->getPlusBigValue();
+			foreach($moves as $movementCollection)
+			{	
+				$this->moveByMovementCollection($movementCollection);
+				$newHistory = $this->getHistory();
+				$bestEvaluation = min($bestEvaluation, $this->minimaxAlphaBeta(
+					$this->getDecreasedMinimaxArray($parameters), $newHistory
+				));
+				$this->undo($history);
+				$parameters["beta"] = min($parameters["beta"], $bestEvaluation);
 				if($parameters["beta"] <= $parameters["alpha"])
 				{
 					return $bestEvaluation;

@@ -63,10 +63,10 @@ class Evaluator
 
     private function setResultBasedOnGameElement(int $key, GameElement $gameElement): void
     {
-        //$masks = $this->setMasks();
-        //$benefit = ($gameElement instanceof Emptiness) ? 0 : $this->getBenefit($key, $gameElement);
+        $masks = $this->setMasks();
+        $benefit = ($gameElement instanceof Emptiness) ? 0 : $this->getBenefit($key, $gameElement);
         $this->result += ($gameElement instanceof Emptiness) ? 0
-        : ($gameElement->isWhite() ? 1000 : -1000)*($gameElement->isQueen() ? 4 : 1);//+$benefit;
+        : ($gameElement->isWhite() ? 1000 : -1000)*($gameElement->isQueen() ? 4 : 1)+$benefit;
     }
 
     private function getBenefit(int $key, GameElement $gameElement): int
