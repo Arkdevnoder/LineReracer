@@ -16,6 +16,12 @@ class Evaluator
 
     private array $masks;
 
+    private int $whiteLeftSided = 0;
+    private int $whiteRightSided = 0;
+
+    private int $blackLeftSided = 0;
+    private int $blackRightSided = 0;
+
     private array $benefitsMask = [
         0, 0, 0, 0,
         50, 40, 40, 50,
@@ -27,9 +33,13 @@ class Evaluator
         -20, -20, 1000, -20
     ];
 
+    private array $leftSide = [
+        0, 1, 4, 5, 8, 9, 12, 13, 16, 17, 20, 21, 24, 25, 28, 29
+    ];
+
     public function __construct()
     {
-        $this->result = 0;
+        $this->flush();
     }
 
     public function getMask(bool $isWhite): array
@@ -39,8 +49,25 @@ class Evaluator
 
     public function getRatio(): int
     {
+        $this->flush();
+        $ratio = $this->getRatioContinue();
+        return $ratio + $this->getSideRatio();
+    }
+
+    private function getSideRatio(): int
+    {
+        $diffWhite = -abs($this->whiteLeftSided - $this->whiteRightSided);
+        $diffBlack = abs($this->blackLeftSided - $this->blackRightSided);
+        return ($diffWhite+$diffBlack)*200;
+    }
+
+    private function flush(): void
+    {
         $this->result = 0;
-        return $this->getRatioContinue();
+        $this->whiteLeftSided = 0;
+        $this->whiteRightSided = 0;
+        $this->blackLeftSided = 0;
+        $this->blackRightSided = 0;
     }
 
     private function getBlackBenefitsMask(): array
@@ -63,10 +90,30 @@ class Evaluator
 
     private function setResultBasedOnGameElement(int $key, GameElement $gameElement): void
     {
+        $gameElement instanceof Emptiness ?: $this->recountSides($key, $gameElement);
         $masks = $this->setMasks();
         $benefit = ($gameElement instanceof Emptiness) ? 0 : $this->getBenefit($key, $gameElement);
         $this->result += ($gameElement instanceof Emptiness) ? 0
         : ($gameElement->isWhite() ? 1000 : -1000)*($gameElement->isQueen() ? 4 : 1)+$benefit;
+    }
+
+    private function recountSides(int $key, GameElement $gameElement): void
+    {
+        $gameElement->isWhite() ? $this->recountWhiteSides($key) : $this->recountBlackSides($key);
+    }
+
+    private function recountWhiteSides(int $key): void
+    {
+        $check = in_array($key, $this->leftSide);
+        $this->whiteLeftSided = !$check ? $this->whiteLeftSided : $this->whiteLeftSided + 1;
+        $this->whiteRightSided = $check ? $this->whiteRightSided : $this->whiteRightSided + 1;
+    }
+
+    private function recountBlackSides(int $key): void
+    {
+        $check = in_array($key, $this->leftSide);
+        $this->blackLeftSided = !$check ? $this->blackLeftSided : $this->blackLeftSided + 1;
+        $this->blackRightSided = $check ? $this->blackRightSided : $this->blackRightSided + 1;
     }
 
     private function getBenefit(int $key, GameElement $gameElement): int
