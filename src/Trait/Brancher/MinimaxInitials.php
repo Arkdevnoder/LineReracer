@@ -13,6 +13,7 @@ trait MinimaxInitials
     use Gameable;
 
     public const Depth = 4;
+    public const SurvivalRatio = -1000;
 
     private array $result;
 

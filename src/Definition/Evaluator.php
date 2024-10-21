@@ -58,7 +58,7 @@ class Evaluator
     {
         $diffWhite = -abs($this->whiteLeftSided - $this->whiteRightSided);
         $diffBlack = abs($this->blackLeftSided - $this->blackRightSided);
-        return ($diffWhite+$diffBlack)*200;
+        return ($diffWhite+$diffBlack)*100;
     }
 
     private function flush(): void
