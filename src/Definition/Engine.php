@@ -40,7 +40,7 @@ class Engine
 	private function getContinueContinue(): void
 	{
 		$this->flushResult();
-		foreach($this->getPossibleMoves() as $movementCollection)
+		foreach($this->getPossibleMoves() as $key => $movementCollection)
 		{
 			$this->processingRoot($movementCollection);
 		}
@@ -92,11 +92,12 @@ class Engine
 					$this->getDecreasedMinimaxArray($parameters), $newHistory
 				));
 				$this->undo($history);
-				$parameters["alpha"] = max($parameters["alpha"], $bestEvaluation);
-				if($parameters["beta"] <= $parameters["alpha"])
+
+				if($bestEvaluation > $parameters["beta"])
 				{
-					return $bestEvaluation;
+					break;
 				}
+				$parameters["alpha"] = max($parameters["alpha"], $bestEvaluation);
 			}
 		} else {
 			$bestEvaluation = $this->getPlusBigValue();
@@ -108,11 +109,12 @@ class Engine
 					$this->getDecreasedMinimaxArray($parameters), $newHistory
 				));
 				$this->undo($history);
-				$parameters["beta"] = min($parameters["beta"], $bestEvaluation);
-				if($parameters["beta"] <= $parameters["alpha"])
+
+				if($bestEvaluation < $parameters["alpha"])
 				{
-					return $bestEvaluation;
+					break;
 				}
+				$parameters["beta"] = min($parameters["beta"], $bestEvaluation);
 			}
 		}
 
