@@ -95,7 +95,7 @@ class Engine
 
 				if($bestEvaluation > $parameters["beta"])
 				{
-					break;
+					return $bestEvaluation;
 				}
 				$parameters["alpha"] = max($parameters["alpha"], $bestEvaluation);
 			}
@@ -112,7 +112,7 @@ class Engine
 
 				if($bestEvaluation < $parameters["alpha"])
 				{
-					break;
+					return $bestEvaluation;
 				}
 				$parameters["beta"] = min($parameters["beta"], $bestEvaluation);
 			}
