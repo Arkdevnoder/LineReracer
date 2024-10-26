@@ -38,13 +38,13 @@ class Engine
 	{
 		$history = $this->getHistory();
 		$this->moveByMovementCollection($movementCollection);
-		$this->addRatioByHistory($history, $this->getHistory(), $movementCollection->getString() == "23 19");
+		$this->addRatioByHistory($history, $this->getHistory());
 		$this->undo($history);
 	}
 
-	private function addRatioByHistory(array $oldHistory, array $newHistory, bool $dump = false): void
+	private function addRatioByHistory(array $oldHistory, array $newHistory): void
 	{
-		$ratio = $this->minimaxAlphaBeta($this->getInitialMinimaxArray(), $newHistory, $dump);
+		$ratio = $this->minimaxAlphaBeta($this->getInitialMinimaxArray(), $newHistory);
 		$this->addResult($ratio);
 	}
 
