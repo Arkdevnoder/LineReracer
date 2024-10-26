@@ -24,7 +24,7 @@ class Evaluator
 
     private array $benefitsMask = [
         0, 0, 0, 0,
-        50, 40, 40, 50,
+        70, 50, 50, 70,
         40, 30, 30, 30,
         20, 20, 20, 20,
         10, 20, 20, 10,

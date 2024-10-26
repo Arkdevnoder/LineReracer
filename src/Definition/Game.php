@@ -88,10 +88,11 @@ class Game implements Merger
 		return $this->getEngine()->compute()->getResult();
 	}
 
-	public function getEngineMove(): int
+	public function getEngineMove(bool $isWhite = true): int
 	{
 		$hints = $this->getEngineMoves();
-		return empty($hints) ? -1 : array_search(min($hints), $hints)+1;
+		$extremum = $isWhite ? max($hints) : min($hints);
+		return empty($hints) ? -1 : array_search($extremum, $hints)+1;
 	}
 
 	public function setNotation(string $notation): object
@@ -112,7 +113,7 @@ class Game implements Merger
 	{
 		$this->display();
         $this->setMove(readline("Enter move: "));
-		$move = $this->getEngineMove();
+		$move = $this->getEngineMove(false);
         $move == -1 ?: $this->setMove($move);
 	}
 

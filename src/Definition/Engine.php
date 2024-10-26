@@ -11,22 +11,10 @@ class Engine
 {
 	use MinimaxInitials;
 
-	private $computerIterator = 0; 
-
 	public function compute(): object
 	{
 		$this->getContinueContinue();
 		return $this;
-	}
-
-	private function increaseComputerIterator(): void
-	{
-		$this->computerIterator++;
-	}
-
-	private function flushComputerIterator(): void
-	{
-		$this->computerIterator = 0;
 	}
 
 	private function reverseResult(): void
@@ -50,29 +38,27 @@ class Engine
 	{
 		$history = $this->getHistory();
 		$this->moveByMovementCollection($movementCollection);
-		$this->addRatioByHistory($this->getHistory());
-		$this->flushComputerIterator();
+		$this->addRatioByHistory($history, $this->getHistory(), $movementCollection->getString() == "23 19");
 		$this->undo($history);
 	}
 
-	private function addRatioByHistory(array $history): void
+	private function addRatioByHistory(array $oldHistory, array $newHistory, bool $dump = false): void
 	{
-		$ratio = $this->minimaxAlphaBeta($this->getInitialMinimaxArray(), $history);
-		$benefit = $this->getBenefitByHistory($history, $ratio);
-		$this->addResult($ratio+$benefit);
+		$ratio = $this->minimaxAlphaBeta($this->getInitialMinimaxArray(), $newHistory, $dump);
+		$this->addResult($ratio);
 	}
 
-	private function getBenefitByHistory(array $history, int $ratio): int
+	private function getDepthString(int $depth): string
 	{
-		$isWinningByOpposite = ($history["turn"] == "white" && $ratio < -static::SurvivalRatio)
-		|| ($history["turn"] == "black" && $ratio > static::SurvivalRatio);
-		$computerRatio = $history["turn"] == "white" ? $this->computerIterator : -$this->computerIterator;
-		return $isWinningByOpposite ? $computerRatio : 0;
+		for($j = 0; $j < static::Depth - $depth; $j++)
+		{
+			$result = ($result ?? "")."=> ";
+		}
+		return $result ?? "";
 	}
 
 	private function minimaxAlphaBeta(array $parameters, array $history): int
 	{
-		$this->increaseComputerIterator();
 
 		if($parameters["depth"] === 0)
 		{
