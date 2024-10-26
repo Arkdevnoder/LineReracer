@@ -50,7 +50,7 @@ class Engine
 	{
 		$history = $this->getHistory();
 		$this->moveByMovementCollection($movementCollection);
-		$this->addRatioByHistory($history);
+		$this->addRatioByHistory($this->getHistory());
 		$this->flushComputerIterator();
 		$this->undo($history);
 	}
