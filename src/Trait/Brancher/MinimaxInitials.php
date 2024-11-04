@@ -12,7 +12,7 @@ trait MinimaxInitials
 {
     use Gameable;
 
-    public const Depth = 5;
+    public int $depth = 5;
 
     private array $result;
 
@@ -55,7 +55,7 @@ trait MinimaxInitials
 
     private function getInitialMinimaxArray(): array
 	{
-		return ["alpha" => $this->getMinusBigValue(), "beta" => $this->getPlusBigValue(), "depth" => static::Depth];
+		return ["alpha" => $this->getMinusBigValue(), "beta" => $this->getPlusBigValue(), "depth" => $this->depth];
 	}
 
 	private function getDecreasedMinimaxArray(array $parameters): array

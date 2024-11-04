@@ -40,9 +40,9 @@ trait PieceCollectionLogic
     {
         if($this->getPositionCollection()->get($this->getIndex())->isWhite())
         {
-            return $this->getDirection() == static::DirectionNE || $this->getDirection() == static::DirectionNW;
+            return $this->getDirection() == $this->directionNE || $this->getDirection() == $this->directionNW;
         }
-        return $this->getDirection() == static::DirectionSE || $this->getDirection() == static::DirectionSW;
+        return $this->getDirection() == $this->directionSE || $this->getDirection() == $this->directionSW;
     }
 
     private function getJustStep(): MovementsCollection

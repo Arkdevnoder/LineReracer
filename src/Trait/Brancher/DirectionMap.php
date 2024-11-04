@@ -4,12 +4,12 @@ namespace Arknet\LineReracer\Trait\Brancher;
 
 trait DirectionMap
 {
-    public const DirectionNE = "NE";
-    public const DirectionSE = "SE";
-    public const DirectionSW = "SW";
-    public const DirectionNW = "NW";
+    public string $directionNE = "NE";
+    public string $directionSE = "SE";
+    public string $directionSW = "SW";
+    public string $directionNW = "NW";
 
-    public const Map = [
+    public array $map = [
         "SE" => [
             "x" => 1,
             "y" => 1
@@ -30,7 +30,7 @@ trait DirectionMap
 
     public function getOffset(string $direction): array
     {
-        $coordinates = static::Map[$direction];
+        $coordinates = $this->map[$direction];
         return $coordinates;
     }
 

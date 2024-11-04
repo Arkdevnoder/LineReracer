@@ -63,7 +63,7 @@ class DiagonalCollector
     {
         if(!isset($this->firstDiagonalCollection))
         {
-            $this->firstDiagonalCollection = $this->getNewDiagonalCollection(static::DirectionNE);
+            $this->firstDiagonalCollection = $this->getNewDiagonalCollection($this->directionNE);
         }
         return $this->firstDiagonalCollection;
     }
@@ -72,7 +72,7 @@ class DiagonalCollector
     {
         if(!isset($this->secondDiagonalCollection))
         {
-            $this->secondDiagonalCollection = $this->getNewDiagonalCollection(static::DirectionSE);
+            $this->secondDiagonalCollection = $this->getNewDiagonalCollection($this->directionSE);
         }
         return $this->secondDiagonalCollection;
     }
@@ -81,7 +81,7 @@ class DiagonalCollector
     {
         if(!isset($this->thirdDiagonalCollection))
         {
-            $this->thirdDiagonalCollection = $this->getNewDiagonalCollection(static::DirectionSW);
+            $this->thirdDiagonalCollection = $this->getNewDiagonalCollection($this->directionSW);
         }
         return $this->thirdDiagonalCollection;
     }
@@ -90,7 +90,7 @@ class DiagonalCollector
     {
         if(!isset($this->fourthDiagonalCollection))
         {
-            $this->fourthDiagonalCollection = $this->getNewDiagonalCollection(static::DirectionNW);
+            $this->fourthDiagonalCollection = $this->getNewDiagonalCollection($this->directionNW);
         }
         return $this->fourthDiagonalCollection;
     }

@@ -50,7 +50,7 @@ class Engine
 
 	private function getDepthString(int $depth): string
 	{
-		for($j = 0; $j < static::Depth - $depth; $j++)
+		for($j = 0; $j < $this->depth - $depth; $j++)
 		{
 			$result = ($result ?? "")."=> ";
 		}
